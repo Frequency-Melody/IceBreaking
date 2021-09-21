@@ -5,6 +5,6 @@ import (
 	"testing"
 )
 
-func TestDbConnect(t *testing.T)  {
+func TestDbConnect(t *testing.T) {
 	fmt.Println(Get())
 }

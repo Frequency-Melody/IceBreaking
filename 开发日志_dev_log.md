@@ -30,4 +30,10 @@ type AssStuPic struct {
     StudentId int
     PictureId int
 }
+
+// 一张表只存学生 id，这样能快速检索到有哪些学生
+type StudentId struct {
+gorm.Model
+StudentId int
+}
 ```

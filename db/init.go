@@ -16,13 +16,14 @@ func Get() *gorm.DB {
 func init() {
 	DbConn()
 	creatTable()
+	fmt.Println("数据库初始化")
 }
 
 // 创建数据库连接
-func DbConn()  {
+func DbConn() {
 	c := config.Get()
 	m := c.Mysql
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s" +
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s"+
 		"?charset=utf8mb4&parseTime=True&loc=Local",
 		m.User, m.Pwd, m.Host, m.Port, m.Database)
 	var err error
@@ -33,7 +34,7 @@ func DbConn()  {
 }
 
 //表不存在则创建
-func creatTable()  {
+func creatTable() {
 	db.Set("gorm:table_options", "ENGINE=InnoDB").
-		AutoMigrate(&Student{}, &Picture{}, &AssStuPic{})
+		AutoMigrate(&Student{}, &Picture{}, &RelationStudentPic{}, &StudentId{})
 }
