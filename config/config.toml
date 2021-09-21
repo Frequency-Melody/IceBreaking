@@ -1,0 +1,6 @@
+[Mysql]
+# Host 和 Pwd 信息较敏感，放环境变量，详见 ./config.go 的 initConfig()
+Database = "hdu_help"
+User = "root"
+Port = "3306"
+Table = "master_mission"
