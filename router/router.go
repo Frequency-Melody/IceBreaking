@@ -1,7 +1,7 @@
 package router
 
 import (
-	"IceBreaking/crud"
+	"IceBreaking/model"
 	"IceBreaking/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -65,7 +65,7 @@ func initRouter() {
 			//name := c.DefaultPostForm("name", "")
 			//department := c.DefaultPostForm("department", "")
 			//hidePicStr := c.PostForm("hidePic")
-			stu := crud.Student{}
+			stu := model.Student{}
 			err := c.ShouldBindJSON(&stu)
 			if err != nil {
 				c.JSON(http.StatusBadRequest, service.MakeErrJson(service.ParamError()))
@@ -73,6 +73,11 @@ func initRouter() {
 			}
 
 			c.JSON(http.StatusOK, service.AddStudent(&stu))
+		})
+
+		r.GET("/stu/count", func(c *gin.Context) {
+			count := service.CountStudents()
+			c.JSON(http.StatusOK, service.MakeSuccessJson(count))
 		})
 	}
 

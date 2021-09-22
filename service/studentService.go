@@ -2,6 +2,7 @@ package service
 
 import (
 	"IceBreaking/crud"
+	"IceBreaking/model"
 	"IceBreaking/util"
 	"math/rand"
 )
@@ -25,6 +26,7 @@ func GetRandStudent() JsonResponse {
 	return MakeSuccessJson(stu)
 }
 
+// GetRandStudentWithPicture 随机 num 个学生，并且抽出一个人返回照片
 func GetRandStudentWithPicture(num int) JsonResponse {
 	studentIds := crud.GetStudentIds()
 	studentNum := len(studentIds)
@@ -36,7 +38,7 @@ func GetRandStudentWithPicture(num int) JsonResponse {
 	}
 	// 抽取 n 个 studentId （的下标），即所有需要返回的学生的信息
 	indexs := util.GetSomeRandNumber(num, 0, studentNum)
-	students := make([]*crud.Student, 0, num)
+	students := make([]*model.Student, 0, num)
 	for _, value := range indexs {
 		student := crud.GetStudentById(uint(studentIds[value].StudentId))
 		students = append(students, student)
@@ -46,10 +48,10 @@ func GetRandStudentWithPicture(num int) JsonResponse {
 	selectedIndex := 0
 	selectedStudentId := students[selectedIndex].ID
 	picture := crud.GetPictureByStudentId(int(selectedStudentId))
-	return MakeSuccessJson(PictureWithStudents{Picture: &picture, Students: students})
+	return MakeSuccessJson(model.PictureWithStudents{Picture: &picture, Students: students})
 }
 
-func AddStudent(stu *crud.Student) JsonResponse {
+func AddStudent(stu *model.Student) JsonResponse {
 	id, err := crud.AddStudent(stu)
 	if err != nil {
 		return MakeErrJson(StudentAlreadyExistError())
@@ -57,4 +59,8 @@ func AddStudent(stu *crud.Student) JsonResponse {
 	// 同步更新 StudentId 表，为了随机取学生时能快速查询
 	crud.AddStudentId(int(id), stu.HidePic)
 	return MakeSuccessJson(map[string]int{"id": int(id)})
+}
+
+func CountStudents() JsonResponse {
+	return MakeSuccessJson(map[string]interface{}{"count": crud.CountStudents()})
 }

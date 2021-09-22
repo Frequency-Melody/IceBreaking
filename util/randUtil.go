@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// getSomeRandNumber 获取 num 个随机数
+// GetSomeRandNumber 获取 num 个随机数
 // 形参：num:随机数数量，start: 起始数，end：结束数，包含开始不包含结束
 // 返回：nums：随机数切片
 func GetSomeRandNumber(num, start, end int) (nums []int) {

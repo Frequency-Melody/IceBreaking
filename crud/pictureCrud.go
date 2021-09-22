@@ -2,17 +2,18 @@ package crud
 
 import (
 	"IceBreaking/db"
+	"IceBreaking/model"
 	"gorm.io/gorm"
 )
 
-func GetPictureByStudentId(studentId int) (pic Picture) {
-	rsp := &RelationStudentPic{}
-	db.Get().Where(&RelationStudentPic{StudentId: studentId}).First(&rsp)
+func GetPictureByStudentId(studentId int) (pic model.Picture) {
+	rsp := &model.RelationStudentPic{}
+	db.Get().Where(&model.RelationStudentPic{StudentId: studentId}).First(&rsp)
 	pictureId := rsp.PictureId
 	return GetPictureByPictureId(pictureId)
 }
 
-func GetPictureByPictureId(id int) (pic Picture) {
-	db.Get().Where(&Picture{Model: gorm.Model{ID: uint(id)}}).First(&pic)
+func GetPictureByPictureId(id int) (pic model.Picture) {
+	db.Get().Where(&model.Picture{Model: gorm.Model{ID: uint(id)}}).First(&pic)
 	return
 }
