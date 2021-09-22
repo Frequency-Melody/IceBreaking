@@ -76,8 +76,7 @@ func initRouter() {
 		})
 
 		r.GET("/stu/count", func(c *gin.Context) {
-			count := service.CountStudents()
-			c.JSON(http.StatusOK, service.MakeSuccessJson(count))
+			c.JSON(http.StatusOK, service.CountStudents())
 		})
 	}
 

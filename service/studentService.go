@@ -12,17 +12,17 @@ func GetStudents() JsonResponse {
 }
 
 func GetStudentById(studentId int) JsonResponse {
-	return MakeSuccessJson(crud.GetStudentById(uint(studentId)))
+	return MakeSuccessJson(crud.GetStudentById(studentId))
 }
 
-// GetRandStudent 获取一个随机学生，unuse
+// GetRandStudent 获取一个随机学生，unused
 func GetRandStudent() JsonResponse {
 	stuIds := crud.GetStudentIds()
 	if len(stuIds) < 1 {
 		return MakeErrJson(NoStudentError())
 	}
 	index := rand.Int() % len(stuIds)
-	stu := crud.GetStudentById(uint(stuIds[index].StudentId))
+	stu := crud.GetStudentById(stuIds[index].StudentId)
 	return MakeSuccessJson(stu)
 }
 
@@ -40,14 +40,14 @@ func GetRandStudentWithPicture(num int) JsonResponse {
 	indexs := util.GetSomeRandNumber(num, 0, studentNum)
 	students := make([]*model.Student, 0, num)
 	for _, value := range indexs {
-		student := crud.GetStudentById(uint(studentIds[value].StudentId))
+		student := crud.GetStudentById(studentIds[value].StudentId)
 		students = append(students, student)
 	}
 	// 将第一个学生作为天选之子，返回图片
 	// 也可以再次随机，util 里面有个 getOneRandNum
 	selectedIndex := 0
 	selectedStudentId := students[selectedIndex].ID
-	picture := crud.GetPictureByStudentId(int(selectedStudentId))
+	picture := crud.GetPictureByStudentId(selectedStudentId)
 	return MakeSuccessJson(model.PictureWithStudents{Picture: &picture, Students: students})
 }
 
@@ -57,8 +57,8 @@ func AddStudent(stu *model.Student) JsonResponse {
 		return MakeErrJson(StudentAlreadyExistError())
 	}
 	// 同步更新 StudentId 表，为了随机取学生时能快速查询
-	crud.AddStudentId(int(id), stu.HidePic)
-	return MakeSuccessJson(map[string]int{"id": int(id)})
+	crud.AddStudentId(id, stu.HidePic)
+	return MakeSuccessJson(map[string]int{"id": id})
 }
 
 func CountStudents() JsonResponse {

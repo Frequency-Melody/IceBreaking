@@ -3,7 +3,6 @@ package crud
 import (
 	"IceBreaking/db"
 	"IceBreaking/model"
-	"gorm.io/gorm"
 )
 
 func GetStudents() (students []*model.Student) {
@@ -21,15 +20,17 @@ func GetStudentIds() (studentIds []*model.StudentId) {
 	return
 }
 
-func AddStudent(stu *model.Student) (studentId uint, err error) {
-	if err = db.Get().Create(stu).Error; err != nil {
+func AddStudent(student *model.Student) (studentId int, err error) {
+	if err = db.Get().Create(student).Error; err != nil {
 		return 0, err
 	}
-	return stu.ID, nil
+	return student.ID, nil
 }
 
-func GetStudentById(studentId uint) (stu *model.Student) {
-	db.Get().Where(&model.Student{Model: gorm.Model{ID: studentId}}).First(&stu)
+func GetStudentById(studentId int) (stu *model.Student) {
+	studentWhere := &model.Student{}
+	studentWhere.ID = studentId
+	db.Get().Where(studentWhere).First(&stu)
 	return
 }
 

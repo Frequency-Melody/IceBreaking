@@ -3,7 +3,6 @@ package crud
 import (
 	"IceBreaking/db"
 	"IceBreaking/model"
-	"gorm.io/gorm"
 )
 
 func GetPictureByStudentId(studentId int) (pic model.Picture) {
@@ -14,6 +13,8 @@ func GetPictureByStudentId(studentId int) (pic model.Picture) {
 }
 
 func GetPictureByPictureId(id int) (pic model.Picture) {
-	db.Get().Where(&model.Picture{Model: gorm.Model{ID: uint(id)}}).First(&pic)
+	picWhere := &model.Picture{}
+	picWhere.ID = id
+	db.Get().Where(picWhere).First(&pic)
 	return
 }
