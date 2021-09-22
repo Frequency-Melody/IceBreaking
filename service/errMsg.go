@@ -5,7 +5,7 @@ type ErrMsg struct {
 	Msg   string
 }
 
-func success() ErrMsg {
+func Success() ErrMsg {
 	return ErrMsg{Error: 20000, Msg: "ok"}
 }
 

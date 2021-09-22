@@ -1,4 +1,4 @@
-package db
+package crud
 
 import (
 	"gorm.io/gorm"
@@ -21,6 +21,7 @@ type Picture struct {
 // 学生与照片的关联表
 // 其实一对一关系，把 StuId 放在 Picture 字段里也行
 // 但是为了防止传给前端的时候，被前端知道 StuId 不太好
+// 再次横跳，其实返回的时候把 StuId 修剪一下也行
 type RelationStudentPic struct {
 	gorm.Model
 	StudentId int

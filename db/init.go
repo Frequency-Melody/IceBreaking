@@ -2,6 +2,7 @@ package db
 
 import (
 	"IceBreaking/config"
+	"IceBreaking/crud"
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -36,5 +37,5 @@ func DbConn() {
 //表不存在则创建
 func creatTable() {
 	db.Set("gorm:table_options", "ENGINE=InnoDB").
-		AutoMigrate(&Student{}, &Picture{}, &RelationStudentPic{}, &StudentId{})
+		AutoMigrate(&crud.Student{}, &crud.Picture{}, &crud.RelationStudentPic{}, &crud.StudentId{})
 }
