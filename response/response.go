@@ -1,4 +1,4 @@
-package service
+package response
 
 type JsonResponse struct {
 	Error    int

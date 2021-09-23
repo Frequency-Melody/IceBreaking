@@ -3,15 +3,21 @@ package crud
 import (
 	"IceBreaking/db"
 	"IceBreaking/model"
+	"gorm.io/gorm"
 )
 
+// SelectStudentInsensitiveFiled 获取学生表的非敏感字段
+func SelectStudentInsensitiveFiled() *gorm.DB{
+	return db.Get().Select("name", "ID")
+}
+
 func GetStudents() (students []*model.Student) {
-	db.Get().Where(&model.Student{}).Find(&students)
+	SelectStudentInsensitiveFiled().Where(&model.Student{}).Find(&students)
 	return
 }
 
 func CountStudents() (count int64) {
-	db.Get().Model(&model.Student{}).Count(&count)
+	SelectStudentInsensitiveFiled().Model(&model.Student{}).Count(&count)
 	return
 }
 
@@ -30,7 +36,7 @@ func AddStudent(student *model.Student) (studentId int, err error) {
 func GetStudentById(studentId int) (stu *model.Student) {
 	studentWhere := &model.Student{}
 	studentWhere.ID = studentId
-	db.Get().Where(studentWhere).First(&stu)
+	SelectStudentInsensitiveFiled().Where(studentWhere).First(&stu)
 	return
 }
 

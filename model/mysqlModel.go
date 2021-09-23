@@ -4,27 +4,24 @@ import (
 	"time"
 )
 
-
 type ModelWithoutDelete struct {
-	ID        int `gorm:"primarykey"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID        int       `gorm:"primarykey"`
+	CreatedAt time.Time `json:"-"`
+	UpdatedAt time.Time `json:"-"`
 }
 
 type Student struct {
 	ModelWithoutDelete
 	Name       string `binding:"required"`
-	StaffId    int `gorm:"unique" binding:"required"`
-	Department string `gorm:"comment:部门" binding:"required"`
-	HidePic    bool   `gorm:"comment:是否隐藏照片"`
+	StaffId    int    `gorm:"unique" binding:"required" json:"staffId,omitempty"`
+	Department string `gorm:"comment:部门" binding:"required" json:"department,omitempty"`
+	HidePic    bool   `gorm:"comment:是否隐藏照片" json:"hidePic,omitempty"`
 }
 
 type Picture struct {
 	ModelWithoutDelete
 	Url string `gorm:"comment:图片在阿里云 OSS 中的地址"`
 }
-
-
 
 // RelationStudentPic 学生与照片的关联表
 // 其实一对一关系，把 StuId 放在 Picture 字段里也行
@@ -41,5 +38,5 @@ type RelationStudentPic struct {
 type StudentId struct {
 	ModelWithoutDelete
 	StudentId int
-	HidePic   bool
+	HidePic   bool `json:"-"`
 }

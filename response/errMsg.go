@@ -1,4 +1,4 @@
-package service
+package response
 
 type ErrMsg struct {
 	Error int
