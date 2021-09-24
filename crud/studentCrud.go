@@ -7,7 +7,7 @@ import (
 )
 
 // SelectStudentInsensitiveFiled 获取学生表的非敏感字段
-func SelectStudentInsensitiveFiled() *gorm.DB{
+func SelectStudentInsensitiveFiled() *gorm.DB {
 	return db.Get().Select("name", "ID")
 }
 

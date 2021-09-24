@@ -1,16 +1,22 @@
 package response
 
+import "strings"
+
 type ErrMsg struct {
 	Error int
 	Msg   string
 }
 
-func Success() ErrMsg {
+func MsgSuccess() ErrMsg {
 	return ErrMsg{Error: 20000, Msg: "ok"}
 }
 
-func ParamError() ErrMsg {
-	return ErrMsg{Error: 40001, Msg: "参数错误"}
+func ParamError(detail string) ErrMsg {
+	msg := "参数错误"
+	if strings.TrimSpace(detail) != ""{
+		msg += ":" + detail
+	}
+	return ErrMsg{Error: 40001, Msg: msg}
 }
 
 func NoStudentError() ErrMsg {

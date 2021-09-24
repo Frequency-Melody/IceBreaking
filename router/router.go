@@ -23,35 +23,30 @@ const (
 func initRouter() {
 	r := gin.Default()
 	//student
+	groupStudent := r.Group("/student")
 	{
-		r.GET("/student/all", func(c *gin.Context) {
+		groupStudent.GET("/all", func(c *gin.Context) {
 			c.JSON(http.StatusOK, service.GetStudents())
 		})
 
-		r.GET("/student/id", func(c *gin.Context) {
-			idString := c.DefaultQuery("id", "")
-			if idString == "" {
-				c.JSON(http.StatusBadRequest, response.MakeErrJson(response.ParamError()))
-				return
+		groupStudent.GET("/id", func(c *gin.Context) {
+			if id, err := strconv.Atoi(c.Query("id")); err != nil {
+				c.JSON(http.StatusBadRequest, response.MakeErrJson(response.ParamError("id 不能为空")))
+			} else {
+				c.JSON(http.StatusOK, service.GetStudentById(id))
 			}
-			id, err := strconv.Atoi(idString)
-			if err != nil {
-				c.JSON(http.StatusBadRequest, response.MakeErrJson(response.ParamError()))
-				return
-			}
-			c.JSON(http.StatusOK, service.GetStudentById(id))
 		})
 
-		r.GET("/student/rand", func(c *gin.Context) {
+		groupStudent.GET("/rand", func(c *gin.Context) {
 			// num 是每次返回的学生的数量，且不得小于 MIN_RAND_NUM
 			numString := c.DefaultQuery("num", "")
 			if numString == "" {
-				c.JSON(http.StatusBadRequest, response.MakeErrJson(response.ParamError()))
+				c.JSON(http.StatusBadRequest, response.MakeErrJson(response.ParamError("num 不能为空")))
 				return
 			}
 			num, err := strconv.Atoi(numString)
 			if err != nil {
-				c.JSON(http.StatusBadRequest, response.MakeErrJson(response.ParamError()))
+				c.JSON(http.StatusBadRequest, response.MakeErrJson(response.ParamError("num 必须为数字")))
 				return
 			}
 			if num < MIN_RAND_NUM {
@@ -62,51 +57,40 @@ func initRouter() {
 			return
 		})
 
-		r.POST("/student/add", func(c *gin.Context) {
-			//name := c.DefaultPostForm("name", "")
-			//department := c.DefaultPostForm("department", "")
-			//hidePicStr := c.PostForm("hidePic")
+		groupStudent.POST("/add", func(c *gin.Context) {
 			stu := model.Student{}
 			err := c.ShouldBindJSON(&stu)
 			if err != nil {
-				c.JSON(http.StatusBadRequest, response.MakeErrJson(response.ParamError()))
+				c.JSON(http.StatusBadRequest, response.MakeErrJson(response.ParamError(err.Error())))
 				return
 			}
 
 			c.JSON(http.StatusOK, service.AddStudent(&stu))
 		})
 
-		r.GET("/student/count", func(c *gin.Context) {
+		groupStudent.GET("/count", func(c *gin.Context) {
 			c.JSON(http.StatusOK, service.CountStudents())
 		})
 	}
 
 	//picture
+	groupPicture := r.Group("/picture")
 	{
-		r.GET("/picture/verify", func(c *gin.Context) {
-			studentIdString := c.DefaultQuery("studentId", "")
-			if studentIdString == "" {
-				c.JSON(http.StatusBadRequest, response.MakeErrJson(response.ParamError()))
+		groupPicture.GET("/verify", func(c *gin.Context) {
+			var studentId, pictureId int
+			var err error
+			if studentId, err = strconv.Atoi(c.Query("studentId")); err != nil {
+				c.JSON(http.StatusBadRequest, response.MakeErrJson(response.ParamError(err.Error())))
 				return
 			}
-			studentId, err := strconv.Atoi(studentIdString)
+			if pictureId, err = strconv.Atoi(c.Query("pictureId")); err != nil {
+				c.JSON(http.StatusBadRequest, response.MakeErrJson(response.ParamError(err.Error())))
+			}
 			if err != nil {
-				c.JSON(http.StatusBadRequest, response.MakeErrJson(response.ParamError()))
+				c.JSON(http.StatusBadRequest, response.MakeErrJson(response.ParamError(err.Error())))
 				return
 			}
-
-			pictureIdString := c.DefaultQuery("pictureId", "")
-			if pictureIdString == "" {
-				c.JSON(http.StatusBadRequest, response.MakeErrJson(response.ParamError()))
-				return
-			}
-			pictureId, err := strconv.Atoi(pictureIdString)
-			if err != nil {
-				c.JSON(http.StatusBadRequest, response.MakeErrJson(response.ParamError()))
-				return
-			}
-
-			c.JSON(http.StatusOK, service.VerifyPictureBelongToStudent(pictureId, studentId))
+			c.JSON(http.StatusOK, service.VerifyPictureBelongToStudent(studentId, pictureId))
 		})
 	}
 

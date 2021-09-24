@@ -29,8 +29,8 @@ type Picture struct {
 // 再次横跳，其实返回的时候把 StuId 修剪一下也行
 type RelationStudentPic struct {
 	ModelWithoutDelete
-	StudentId int
-	PictureId int
+	StudentId int `json:"studentId" binding:"required"`
+	PictureId int `json:"pictureId" binding:"required"`
 }
 
 // StudentId 一张表只存学生 id，这样能快速检索到有哪些学生
