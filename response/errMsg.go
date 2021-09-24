@@ -13,7 +13,7 @@ func MsgSuccess() ErrMsg {
 
 func ParamError(detail string) ErrMsg {
 	msg := "参数错误"
-	if strings.TrimSpace(detail) != ""{
+	if strings.TrimSpace(detail) != "" {
 		msg += ":" + detail
 	}
 	return ErrMsg{Error: 40001, Msg: msg}
