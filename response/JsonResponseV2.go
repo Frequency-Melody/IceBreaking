@@ -1,13 +1,33 @@
-// Package response 返回体的 struct 以及封装的一些快捷函数
 package response
-//
-//type JsonResponse struct {
-//	Error string
-//	Msg string
-//	Data     interface{}
-//	Redirect string
-//}
-//
+
+import "errors"
+
+type Response interface {
+	Error() error
+	Code()	int
+	Data()	interface{}
+	Redirect()	string
+}
+
+type ParamError struct {
+}
+
+func (p ParamError) Error() error {
+	return errors.New("参数错误")
+}
+
+func (p ParamError) Code() int {
+	return 40001
+}
+
+func (p ParamError) Data() interface{} {
+	return nil
+}
+
+func (p ParamError) Redirect() string {
+	return ""
+}
+
 //func MakeJsonFromErrMsg(errMsg ErrMsg, data interface{}, redirect string) JsonResponse {
 //	return JsonResponse{errMsg.Error(), errMsg.Msg(), data, redirect}
 //}
@@ -19,4 +39,3 @@ package response
 //func MakeSuccessJson(data interface{}) (res JsonResponse) {
 //	return MakeJsonFromErrMsg(&MsgSuccess{}, data, "")
 //}
-//

@@ -1,3 +1,4 @@
+// Package config 项目配置
 package config
 
 import (

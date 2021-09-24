@@ -1,3 +1,4 @@
+// Package util 工具类
 package util
 
 import (
@@ -16,9 +17,6 @@ func GetSomeRandNumber(num, start, end int) (nums []int) {
 		numTemp := rand.Intn(end-start) + start
 		//st := time.Now().Unix()
 		//numTemp := int(st % int64(end-start)) + start
-		//numTemp := int(time.Now().UnixNano()%int64(end-start) + int64(start))
-		//time.Sleep(1)
-		//fmt.Println(numTemp)
 		if !contains(nums, numTemp) {
 			nums = append(nums, numTemp)
 			i++

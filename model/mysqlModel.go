@@ -1,6 +1,8 @@
+// Package model 数据库 Model 以及返回体 Model
 package model
 
 import (
+	"errors"
 	"time"
 )
 
@@ -16,6 +18,28 @@ type Student struct {
 	StaffId    int    `gorm:"unique" binding:"required" json:"staffId,omitempty"`
 	Department string `gorm:"comment:部门" binding:"required" json:"department,omitempty"`
 	HidePic    bool   `gorm:"comment:是否隐藏照片" json:"hidePic,omitempty"`
+}
+
+func (s Student) Error() error {
+	if s.ID == 0 {
+		return errors.New("data is empty")
+	}
+	return nil
+}
+
+func (s Student) Code() int{
+	if s.ID == 0 {
+		return 40401
+	}
+	return 200
+}
+
+func (s Student) Data() interface{}{
+	return s
+}
+
+func (s Student) Redirect() string{
+	return ""
 }
 
 type Picture struct {
@@ -40,3 +64,4 @@ type StudentId struct {
 	StudentId int
 	HidePic   bool `json:"-"`
 }
+

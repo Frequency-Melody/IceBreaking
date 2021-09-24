@@ -3,12 +3,11 @@ package service
 import (
 	"IceBreaking/db"
 	"IceBreaking/model"
-	"IceBreaking/response"
 	"github.com/gin-gonic/gin"
 )
 
 // VerifyPictureBelongToStudent 验证某个图片是否属于某个学生，并返回学生信息
-func VerifyPictureBelongToStudent(pictureId, studentId int) response.JsonResponse {
+func VerifyPictureBelongToStudent(pictureId, studentId int) (data interface{}, err error) {
 	student := &model.Student{}
 	relationStudentPic := &model.RelationStudentPic{}
 	// 通过关联表获取这张图片的正确的学生的信息的id
@@ -18,8 +17,8 @@ func VerifyPictureBelongToStudent(pictureId, studentId int) response.JsonRespons
 	studentWhere.ID = relationStudentPic.StudentId
 	db.Get().Where(studentWhere).First(student)
 	if student.ID == studentId {
-		return response.MakeSuccessJson(gin.H{"verify": "true", "studentInfo": student})
+		return gin.H{"verify": "true", "studentInfo": student}, nil
 	} else {
-		return response.MakeSuccessJson(gin.H{"verify": "false", "studentInfo": student})
+		return gin.H{"verify": "false", "studentInfo": student}, nil
 	}
 }

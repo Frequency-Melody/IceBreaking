@@ -1,3 +1,4 @@
+// Package db 数据库连接初始化
 package db
 
 import (

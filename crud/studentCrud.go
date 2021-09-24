@@ -4,6 +4,7 @@ import (
 	"IceBreaking/db"
 	"IceBreaking/model"
 	"gorm.io/gorm"
+	"log"
 )
 
 // SelectStudentInsensitiveFiled 获取学生表的非敏感字段
@@ -12,35 +13,51 @@ func SelectStudentInsensitiveFiled() *gorm.DB {
 }
 
 func GetStudents() (students []*model.Student) {
-	SelectStudentInsensitiveFiled().Where(&model.Student{}).Find(&students)
+	err := SelectStudentInsensitiveFiled().Where(&model.Student{}).Find(&students).Error
+	if err != nil {
+		log.Println(err)
+	}
 	return
 }
 
 func CountStudents() (count int64) {
-	SelectStudentInsensitiveFiled().Model(&model.Student{}).Count(&count)
+	err := SelectStudentInsensitiveFiled().Model(&model.Student{}).Count(&count).Error
+	if err != nil {
+		log.Println(err)
+	}
 	return
 }
 
 func GetStudentIds() (studentIds []*model.StudentId) {
-	db.Get().Where(map[string]interface{}{"hide_pic": false}).Find(&studentIds)
+	err := db.Get().Where(map[string]interface{}{"hide_pic": false}).Find(&studentIds).Error
+	if err != nil {
+		log.Println(err)
+	}
 	return
 }
 
-func AddStudent(student *model.Student) (studentId int, err error) {
-	if err = db.Get().Create(student).Error; err != nil {
-		return 0, err
+func AddStudent(student *model.Student) (studentId int) {
+	if err := db.Get().Create(student).Error; err != nil {
+		log.Println(err)
+		return
 	}
-	return student.ID, nil
+	return student.ID
 }
 
 func GetStudentById(studentId int) (stu *model.Student) {
 	studentWhere := &model.Student{}
 	studentWhere.ID = studentId
-	SelectStudentInsensitiveFiled().Where(studentWhere).First(&stu)
+	err := SelectStudentInsensitiveFiled().Where(studentWhere).First(&stu).Error
+	if err != nil {
+		log.Println(err)
+	}
 	return
 }
 
-func AddStudentId(studentId int, hidePic bool) {
-	db.Get().Create(&model.StudentId{StudentId: studentId, HidePic: hidePic})
+func AddStudentId(studentId int, hidePic bool){
+	err := db.Get().Create(&model.StudentId{StudentId: studentId, HidePic: hidePic}).Error
+	if err != nil {
+		log.Println(err)
+	}
 	return
 }
