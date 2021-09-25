@@ -17,11 +17,12 @@ func GetStudents(c *gin.Context) (int, interface{}) {
 	return http.StatusOK, service.GetStudents()
 }
 
-func GetStudentById(c *gin.Context) (int, interface{}) {
-	if id, err := strconv.Atoi(c.Query("id")); err != nil {
-		return http.StatusBadRequest, response.MakeErrJson(response.ParamError("id 不能为空"))
+func GetStudentByUuid(c *gin.Context) (int, interface{}) {
+	uuid := c.Query("uuid")
+	if uuid == ""{
+		return http.StatusBadRequest, response.MakeErrJson(response.ParamError("uuid 不能为空"))
 	} else {
-		return http.StatusOK, service.GetStudentById(id)
+		return http.StatusOK, service.GetStudentByUuid(uuid)
 	}
 }
 
@@ -47,7 +48,6 @@ func AddStudent(c *gin.Context) (int, interface{}) {
 	if err != nil {
 		return http.StatusBadRequest, response.MakeErrJson(response.ParamError(err.Error()))
 	}
-
 	return http.StatusOK, service.AddStudent(&stu)
 }
 

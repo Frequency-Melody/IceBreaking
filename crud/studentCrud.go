@@ -3,12 +3,13 @@ package crud
 import (
 	"IceBreaking/db"
 	"IceBreaking/model"
+	"github.com/go-basic/uuid"
 	"gorm.io/gorm"
 )
 
 // SelectStudentInsensitiveFiled 获取学生表的非敏感字段
 func SelectStudentInsensitiveFiled() *gorm.DB {
-	return db.Get().Select("name", "ID")
+	return db.Get().Select("name", "Uuid")
 }
 
 func GetStudents() (students []*model.Student) {
@@ -21,26 +22,26 @@ func CountStudents() (count int64) {
 	return
 }
 
-func GetStudentIds() (studentIds []*model.StudentId) {
-	db.Get().Where(map[string]interface{}{"hide_pic": false}).Find(&studentIds)
+func GetStudentVos() (studentVos []*model.StudentVo) {
+	db.Get().Where(map[string]interface{}{"hide_pic": false}).Find(&studentVos)
 	return
 }
 
-func AddStudent(student *model.Student) (studentId int, err error) {
+func AddStudent(student *model.Student) (studentUuid string, err error) {
 	if err = db.Get().Create(student).Error; err != nil {
-		return 0, err
+		return uuid.New(), err
 	}
-	return student.ID, nil
+	return student.Uuid, nil
 }
 
-func GetStudentById(studentId int) (stu *model.Student) {
+func GetStudentByUuid(studentUuid string) (stu *model.Student) {
 	studentWhere := &model.Student{}
-	studentWhere.ID = studentId
+	studentWhere.Uuid = studentUuid
 	SelectStudentInsensitiveFiled().Where(studentWhere).First(&stu)
 	return
 }
 
-func AddStudentId(studentId int, hidePic bool) {
-	db.Get().Create(&model.StudentId{StudentId: studentId, HidePic: hidePic})
+func AddStudentVo(studentVo model.StudentVo) {
+	db.Get().Create(&studentVo)
 	return
 }

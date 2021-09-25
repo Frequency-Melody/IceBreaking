@@ -5,20 +5,17 @@ import (
 	"IceBreaking/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"strconv"
 )
 
 func VerifyPictureBelongToStudent(c *gin.Context) (int, interface{}) {
-	var studentId, pictureId int
-	var err error
-	if studentId, err = strconv.Atoi(c.Query("studentId")); err != nil {
-		return http.StatusBadRequest, response.MakeErrJson(response.ParamError(err.Error()))
+	studentUuid := c.Query("studentUuid")
+	pictureUuid := c.Query("pictureUuid")
+	if studentUuid == "" {
+		return http.StatusBadRequest, response.MakeErrJson(response.ParamError("缺少 studentUuid 参数 "))
 	}
-	if pictureId, err = strconv.Atoi(c.Query("pictureId")); err != nil {
-		return http.StatusBadRequest, response.MakeErrJson(response.ParamError(err.Error()))
+	if pictureUuid == "" {
+		return http.StatusBadRequest, response.MakeErrJson(response.ParamError("缺少 pictureUuid 参数"))
 	}
-	if err != nil {
-		return http.StatusBadRequest, response.MakeErrJson(response.ParamError(err.Error()))
-	}
-	return http.StatusOK, service.VerifyPictureBelongToStudent(studentId, pictureId)
+	return http.StatusOK, service.VerifyPictureBelongToStudent(pictureUuid, studentUuid)
+
 }

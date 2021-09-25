@@ -19,7 +19,7 @@ func initRouter() {
 	{
 		groupStudent.GET("/all", requestEntry(controller.GetStudents))
 
-		groupStudent.GET("/id", requestEntry(controller.GetStudentById))
+		groupStudent.GET("/id", requestEntry(controller.GetStudentByUuid))
 
 		groupStudent.GET("/rand", requestEntry(controller.GetRandStudentWithPicture))
 

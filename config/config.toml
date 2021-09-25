@@ -3,4 +3,3 @@
 Database = "hdu_help"
 User = "root"
 Port = "3306"
-Table = "master_mission"

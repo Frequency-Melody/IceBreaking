@@ -8,16 +8,16 @@ import (
 )
 
 // VerifyPictureBelongToStudent 验证某个图片是否属于某个学生，并返回学生信息
-func VerifyPictureBelongToStudent(pictureId, studentId int) response.JsonResponse {
+func VerifyPictureBelongToStudent(pictureUuid, studentUuid string) response.JsonResponse {
 	student := &model.Student{}
 	relationStudentPic := &model.RelationStudentPic{}
 	// 通过关联表获取这张图片的正确的学生的信息的id
-	db.Get().Where(&model.RelationStudentPic{PictureId: pictureId}).First(relationStudentPic)
+	db.Get().Where(&model.RelationStudentPic{PictureUuid: pictureUuid}).First(relationStudentPic)
 	studentWhere := &model.Student{}
 	// 通过 id 查询完整的学生信息
-	studentWhere.ID = relationStudentPic.StudentId
+	studentWhere.Uuid = relationStudentPic.StudentUuid
 	db.Get().Where(studentWhere).First(student)
-	if student.ID == studentId {
+	if student.Uuid == studentUuid {
 		return response.MakeSuccessJson(gin.H{"verify": "true", "studentInfo": student})
 	} else {
 		return response.MakeSuccessJson(gin.H{"verify": "false", "studentInfo": student})

@@ -10,5 +10,4 @@ type Mysql struct {
 	User     string
 	Pwd      string
 	Port     string
-	Table    string
 }

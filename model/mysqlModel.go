@@ -6,6 +6,7 @@ import (
 
 type ModelWithoutDelete struct {
 	ID        int       `gorm:"primarykey"`
+	Uuid string
 	CreatedAt time.Time `json:"-"`
 	UpdatedAt time.Time `json:"-"`
 }
@@ -29,14 +30,14 @@ type Picture struct {
 // 再次横跳，其实返回的时候把 StuId 修剪一下也行
 type RelationStudentPic struct {
 	ModelWithoutDelete
-	StudentId int `json:"studentId" binding:"required"`
-	PictureId int `json:"pictureId" binding:"required"`
+	StudentUuid string `json:"studentUuid" binding:"required"`
+	PictureUuid string `json:"pictureUuid" binding:"required"`
 }
 
-// StudentId 一张表只存学生 id，这样能快速检索到有哪些学生
+// StudentVo 一张表只存学生 id，这样能快速检索到有哪些学生
 // 同时必须复制 HidePic 字段，否则可能查出的内容无效
-type StudentId struct {
+type StudentVo struct {
 	ModelWithoutDelete
-	StudentId int
+	StudentUuid string
 	HidePic   bool `json:"-"`
 }

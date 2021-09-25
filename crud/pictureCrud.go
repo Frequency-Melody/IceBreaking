@@ -5,16 +5,16 @@ import (
 	"IceBreaking/model"
 )
 
-func GetPictureByStudentId(studentId int) (pic model.Picture) {
+func GetPictureByStudentUuid(studentUuid string) (picture model.Picture) {
 	rsp := &model.RelationStudentPic{}
-	db.Get().Where(&model.RelationStudentPic{StudentId: studentId}).First(&rsp)
-	pictureId := rsp.PictureId
-	return GetPictureByPictureId(pictureId)
+	db.Get().Where(&model.RelationStudentPic{StudentUuid: studentUuid}).First(&rsp)
+	pictureUuid := rsp.PictureUuid
+	return GetPictureByPictureUuid(pictureUuid)
 }
 
-func GetPictureByPictureId(id int) (pic model.Picture) {
-	picWhere := &model.Picture{}
-	picWhere.ID = id
-	db.Get().Where(picWhere).First(&pic)
+func GetPictureByPictureUuid(uuid string) (picture model.Picture) {
+	pictureWhere := &model.Picture{}
+	pictureWhere.Uuid = uuid
+	db.Get().Where(pictureWhere).First(&picture)
 	return
 }
