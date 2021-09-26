@@ -2,6 +2,7 @@ package crud
 
 import (
 	"IceBreaking/db"
+	"IceBreaking/log"
 	"IceBreaking/model"
 	"github.com/go-basic/uuid"
 	"gorm.io/gorm"
@@ -30,6 +31,7 @@ func GetStudentVos() (studentVos []*model.StudentVo) {
 
 func AddStudent(student *model.Student) (studentUuid string, err error) {
 	if err = db.Get().Create(student).Error; err != nil {
+		log.Sugar().Info("数据库重复插入记录, StaffId:", student.StaffId, ", Name:",student.Name)
 		return uuid.New(), err
 	}
 	return student.Uuid, nil
@@ -43,6 +45,8 @@ func GetStudentByUuid(studentUuid string) (stu *model.Student) {
 }
 
 func AddStudentVo(studentVo model.StudentVo) {
-	db.Get().Create(&studentVo)
+	if err := db.Get().Create(&studentVo); err != nil {
+		log.Sugar().Error("数据库插入失败, studentVo:", studentVo)
+	}
 	return
 }
