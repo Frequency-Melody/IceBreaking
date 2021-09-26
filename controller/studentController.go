@@ -5,7 +5,6 @@ import (
 	"IceBreaking/response"
 	"IceBreaking/service"
 	"github.com/gin-gonic/gin"
-	"net/http"
 	"strconv"
 )
 
@@ -13,44 +12,44 @@ const (
 	MIN_RAND_NUM = 2 // 每次最少随机的人数
 )
 
-func GetStudents(c *gin.Context) (int, interface{}) {
-	return http.StatusOK, service.GetStudents()
+func GetStudents(c *gin.Context) response.Response {
+	return service.GetStudents()
 }
 
-func GetStudentByUuid(c *gin.Context) (int, interface{}) {
+func GetStudentByUuid(c *gin.Context) response.Response {
 	uuid := c.Query("uuid")
-	if uuid == ""{
-		return http.StatusBadRequest, response.MakeErrJson(response.ParamError("uuid 不能为空"))
+	if uuid == "" {
+		return response.LackUuidParamError
 	} else {
-		return http.StatusOK, service.GetStudentByUuid(uuid)
+		return service.GetStudentByUuid(uuid)
 	}
 }
 
-func GetRandStudentWithPicture(c *gin.Context) (int, interface{}) {
+func GetRandStudentWithPicture(c *gin.Context) response.Response {
 	// num 是每次返回的学生的数量，且不得小于 MIN_RAND_NUM
 	numString := c.DefaultQuery("num", "")
 	if numString == "" {
-		return http.StatusBadRequest, response.MakeErrJson(response.ParamError("num 不能为空"))
+		return response.LackRandNumParamError
 	}
 	num, err := strconv.Atoi(numString)
 	if err != nil {
-		return http.StatusBadRequest, response.MakeErrJson(response.ParamError("num 必须为数字"))
+		return response.ParamError
 	}
 	if num < MIN_RAND_NUM {
-		return http.StatusBadRequest, response.MakeErrJson(response.RandNumTooSmallError())
+		return response.RandNumTooSmallError
 	}
-	return http.StatusOK, service.GetRandStudentWithPicture(num)
+	return service.GetRandStudentWithPicture(num)
 }
 
-func AddStudent(c *gin.Context) (int, interface{}) {
+func AddStudent(c *gin.Context) response.Response {
 	stu := model.Student{}
 	err := c.ShouldBindJSON(&stu)
 	if err != nil {
-		return http.StatusBadRequest, response.MakeErrJson(response.ParamError(err.Error()))
+		return response.ParamError
 	}
-	return http.StatusOK, service.AddStudent(&stu)
+	return service.AddStudent(&stu)
 }
 
-func CountStudents(c *gin.Context) (int, interface{}) {
-	return http.StatusOK, service.CountStudents()
+func CountStudents(c *gin.Context) response.Response {
+	return service.CountStudents()
 }

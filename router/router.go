@@ -37,10 +37,3 @@ func initRouter() {
 	err := r.Run()
 	panic(err)
 }
-
-func requestEntry(handler func(c *gin.Context) (int, interface{})) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.JSON(handler(c))
-		c.Abort()
-	}
-}

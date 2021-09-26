@@ -4,18 +4,17 @@ import (
 	"IceBreaking/response"
 	"IceBreaking/service"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
-func VerifyPictureBelongToStudent(c *gin.Context) (int, interface{}) {
+func VerifyPictureBelongToStudent(c *gin.Context) response.Response {
 	studentUuid := c.Query("studentUuid")
 	pictureUuid := c.Query("pictureUuid")
 	if studentUuid == "" {
-		return http.StatusBadRequest, response.MakeErrJson(response.ParamError("缺少 studentUuid 参数 "))
+		return response.LackStudentUuidParamError
 	}
 	if pictureUuid == "" {
-		return http.StatusBadRequest, response.MakeErrJson(response.ParamError("缺少 pictureUuid 参数"))
+		return response.LackPictureUuidParamError
 	}
-	return http.StatusOK, service.VerifyPictureBelongToStudent(pictureUuid, studentUuid)
+	return service.VerifyPictureBelongToStudent(pictureUuid, studentUuid)
 
 }

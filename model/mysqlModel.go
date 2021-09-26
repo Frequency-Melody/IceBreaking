@@ -1,12 +1,13 @@
 package model
 
 import (
+	"IceBreaking/err"
 	"time"
 )
 
 type ModelWithoutDelete struct {
-	ID        int       `gorm:"primarykey"`
-	Uuid string
+	ID        int       `gorm:"primaryKey" json:"id,omitempty"`
+	Uuid      string    `gorm:"index"`
 	CreatedAt time.Time `json:"-"`
 	UpdatedAt time.Time `json:"-"`
 }
@@ -19,9 +20,55 @@ type Student struct {
 	HidePic    bool   `gorm:"comment:是否隐藏照片" json:"hidePic,omitempty"`
 }
 
+func (s Student) Error() error {
+	if s.Uuid == "" {
+		return err.DataEmptyError()
+	}
+	return nil
+}
+
+func (s Student) Code() int {
+	if s.Uuid == "" {
+		return 40400
+	} else {
+		return 20000
+	}
+}
+
+func (s Student) Data() interface{} {
+	return s
+}
+
+func (s Student) Redirect() string {
+	return ""
+}
+
 type Picture struct {
 	ModelWithoutDelete
 	Url string `gorm:"comment:图片在阿里云 OSS 中的地址"`
+}
+
+func (p Picture) Error() error {
+	if p.Uuid == "" {
+		return err.DataEmptyError()
+	}
+	return nil
+}
+
+func (p Picture) Code() int {
+	if p.Uuid == "" {
+		return 40400
+	} else {
+		return 20000
+	}
+}
+
+func (p Picture) Data() interface{} {
+	return p
+}
+
+func (p Picture) Redirect() string {
+	return ""
 }
 
 // RelationStudentPic 学生与照片的关联表
@@ -39,5 +86,5 @@ type RelationStudentPic struct {
 type StudentVo struct {
 	ModelWithoutDelete
 	StudentUuid string
-	HidePic   bool `json:"-"`
+	HidePic     bool `json:"-"`
 }

@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-// validConfig 判断配置是否合法，注：现在只能判断单级配置
+// validConfig 判断配置是否合法，注：现在只能判断单级配置, 没啥用，纯属写着玩
 func (c *config) validConfig(rule func(v interface{}) (err error)) (valid bool) {
 	valid = true // 合法性标志，全部字段不为空则合法\
 	if c == nil {

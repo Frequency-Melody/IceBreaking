@@ -22,6 +22,7 @@ func CountStudents() (count int64) {
 	return
 }
 
+// GetStudentVos 获取学生表视图，存了学生 uuid 和 是否隐藏图片信息，用来快速随机学生
 func GetStudentVos() (studentVos []*model.StudentVo) {
 	db.Get().Where(map[string]interface{}{"hide_pic": false}).Find(&studentVos)
 	return
