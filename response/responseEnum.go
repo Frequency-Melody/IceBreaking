@@ -7,6 +7,9 @@ type ErrorType uint
 
 func (e ErrorType) Error() error {
 	errorMsg := map[ErrorType]string{
+		// 成功
+		Success: "OK",
+
 		// 参数错误
 		ParamError:                "参数错误",
 		RandNumTooSmallError:      "每次随机的人数过少",
@@ -19,6 +22,11 @@ func (e ErrorType) Error() error {
 		NoStudentError:           "学生为空",
 		StudentAlreadyExistError: "该学生已存在，请勿重复添加",
 		NoEnoughStudentError:     "请求的学生数量大于数据库含有的学生总数",
+
+		//文件相关错误
+		FileTooLargeError:     "文件过大，仅支持最大 32M 文件",
+		NotImageError:         "仅支持上传图片",
+		FileUploadFailedError: "文件上传错误",
 	}
 	if m, ok := errorMsg[e]; ok {
 		return errors.New(m)
@@ -29,6 +37,8 @@ func (e ErrorType) Error() error {
 
 func (e ErrorType) Code() int {
 	errorCode := map[ErrorType]int{
+		// 成功
+		Success: 20000,
 		// 参数错误
 		ParamError:                40001,
 		RandNumTooSmallError:      40002,
@@ -41,6 +51,11 @@ func (e ErrorType) Code() int {
 		NoStudentError:           40051,
 		StudentAlreadyExistError: 40052,
 		NoEnoughStudentError:     40053,
+
+		//文件相关错误
+		FileTooLargeError:     40061,
+		NotImageError:         40062,
+		FileUploadFailedError: 40063,
 	}
 	if code, ok := errorCode[e]; ok {
 		return code
@@ -58,8 +73,11 @@ func (e ErrorType) Redirect() string {
 }
 
 const (
+	// 成功
+	Success ErrorType = iota
+
 	// 参数错误
-	ParamError ErrorType = iota
+	ParamError
 	RandNumTooSmallError
 	LackUuidParamError
 	LackRandNumParamError
@@ -70,4 +88,9 @@ const (
 	NoStudentError
 	StudentAlreadyExistError
 	NoEnoughStudentError
+
+	//文件相关错误
+	FileTooLargeError
+	NotImageError
+	FileUploadFailedError
 )

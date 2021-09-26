@@ -7,7 +7,7 @@ import (
 
 // JsonResponse Json 返回体结构
 type JsonResponse struct {
-	Error     int
+	Error    int
 	Msg      string
 	Data     interface{}
 	Redirect string

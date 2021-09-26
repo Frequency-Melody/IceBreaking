@@ -26,12 +26,15 @@ func initRouter() {
 		groupStudent.POST("/add", requestEntry(controller.AddStudent))
 
 		groupStudent.GET("/count", requestEntry(controller.CountStudents))
+
 	}
 
 	//picture
 	groupPicture := r.Group("/picture")
 	{
 		groupPicture.GET("/verify", requestEntry(controller.VerifyPictureBelongToStudent))
+
+		groupPicture.POST("/upload", requestEntry(controller.UploadPicture))
 	}
 
 	err := r.Run()

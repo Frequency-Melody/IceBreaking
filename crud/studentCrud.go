@@ -31,7 +31,7 @@ func GetStudentVos() (studentVos []*model.StudentVo) {
 
 func AddStudent(student *model.Student) (studentUuid string, err error) {
 	if err = db.Get().Create(student).Error; err != nil {
-		log.Sugar().Info("数据库重复插入记录, StaffId:", student.StaffId, ", Name:",student.Name)
+		log.Sugar().Info("数据库重复插入记录, StaffId:", student.StaffId, ", Name:", student.Name)
 		return uuid.New(), err
 	}
 	return student.Uuid, nil
