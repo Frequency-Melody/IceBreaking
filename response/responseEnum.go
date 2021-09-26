@@ -24,9 +24,10 @@ func (e ErrorType) Error() error {
 		NoEnoughStudentError:     "请求的学生数量大于数据库含有的学生总数",
 
 		//文件相关错误
-		FileTooLargeError:     "文件过大，仅支持最大 32M 文件",
-		NotImageError:         "仅支持上传图片",
-		FileUploadFailedError: "文件上传错误",
+		FileTooLargeError:          "文件过大，仅支持最大 32M 文件",
+		NotImageError:              "仅支持上传图片",
+		FileUploadFailedError:      "文件上传错误",
+		FileUploadToOssFailedError: "文件上传到阿里云 OSS 失败",
 	}
 	if m, ok := errorMsg[e]; ok {
 		return errors.New(m)
@@ -53,9 +54,10 @@ func (e ErrorType) Code() int {
 		NoEnoughStudentError:     40053,
 
 		//文件相关错误
-		FileTooLargeError:     40061,
-		NotImageError:         40062,
-		FileUploadFailedError: 40063,
+		FileTooLargeError:          40061,
+		NotImageError:              40062,
+		FileUploadFailedError:      40063,
+		FileUploadToOssFailedError: 40064,
 	}
 	if code, ok := errorCode[e]; ok {
 		return code
@@ -93,4 +95,5 @@ const (
 	FileTooLargeError
 	NotImageError
 	FileUploadFailedError
+	FileUploadToOssFailedError
 )

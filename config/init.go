@@ -33,7 +33,11 @@ func initConfig() {
 	if _, err := toml.Decode(configFilename, &c); err != nil {
 		panic(err)
 	}
-	// Host 和 Pwd 信息比较敏感，放环境变量里
+	// 从环境变量读取敏感信息
 	c.Mysql.Host = os.Getenv("MYSQL_HOST")
 	c.Mysql.Pwd = os.Getenv("MYSQL_PWD")
+
+	//c.OSS.EndPoint = os.Getenv("OSS_ENDPOINT")
+	c.OSS.AccessKeyId = os.Getenv("OSS_ACCESS_KEY_ID")
+	c.OSS.AccessKeySecret = os.Getenv("OSS_ACCESS_KEY_SECRET")
 }
