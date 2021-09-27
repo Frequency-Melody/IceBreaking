@@ -29,10 +29,12 @@ func VerifyPictureBelongToStudent(pictureUuid, studentUuid string) response.Resp
 }
 
 func UploadPictureOfStudent(picture *multipart.FileHeader, studentUuid string) response.Response {
+	// 判断是否存在该学生
 	student := crud.GetStudentByUuid(studentUuid)
 	if student == nil || student.Uuid == "" {
 		return response.NoStudentError
 	}
+	// 打开图片
 	fileHandle, err := picture.Open()
 	if err != nil {
 		log.Sugar().Error("流文件打开错误")
@@ -40,7 +42,7 @@ func UploadPictureOfStudent(picture *multipart.FileHeader, studentUuid string) r
 	}
 	defer fileHandle.Close()
 	fileByte, _ := ioutil.ReadAll(fileHandle)
-	//上传到oss上
+	// 将图片上传到oss上
 	res := UploadFileToOss(picture.Filename, bytes.NewReader(fileByte))
 	// 如果报错就直接返回上传图片至阿里云时的错误
 	if res.Error() != nil {
@@ -49,12 +51,16 @@ func UploadPictureOfStudent(picture *multipart.FileHeader, studentUuid string) r
 	// 无果不报错，那么 res.Data() 返回的一定是 {"url": "图片url"}
 	pictureUrlMap, _ := res.Data().(map[string]string)
 	pictureUrl := pictureUrlMap["url"]
+	// 在 picture 表中添加图片记录
 	pictureUuid := crud.UploadPicture(pictureUrl)
 	if pictureUuid == "" {
 		return response.MysqlInsertError
 	}
-	if !crud.RelatePictureAndStudent(studentUuid, pictureUuid) {
+	// 在学生-图片关联表中添加记录
+	if !crud.CreateOrUpdateRelationOfPictureAndStudent(studentUuid, pictureUuid) {
 		return response.MysqlInsertError
 	}
+	// 更新学生表，指明该学生上传了照片
+	crud.UpdateStudentHasPic(student, true)
 	return &response.PictureUrlDto{Url: pictureUrl}
 }

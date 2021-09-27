@@ -44,3 +44,7 @@ func GetStudentsCanBeShown() (students []*model.Student) {
 	SelectStudentInsensitiveFiled().Where(whereQuery).Find(&students)
 	return
 }
+
+func UpdateStudentHasPic(student *model.Student, hasPic bool){
+	db.Get().Model(&student).Update("has_pic", hasPic)
+}

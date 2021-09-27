@@ -7,7 +7,7 @@ import (
 
 type ModelWithoutDelete struct {
 	ID        int       `gorm:"primaryKey" json:"id,omitempty"`
-	Uuid      string    `gorm:"index"`
+	Uuid      string    `gorm:"index,not null"`
 	CreatedAt time.Time `json:"-"`
 	UpdatedAt time.Time `json:"-"`
 }
