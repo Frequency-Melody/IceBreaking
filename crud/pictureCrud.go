@@ -8,7 +8,6 @@ import (
 	"gorm.io/gorm"
 )
 
-
 func SelectPictureUuidAndUrlFiled() *gorm.DB {
 	return db.Get().Select("url", "uuid")
 }

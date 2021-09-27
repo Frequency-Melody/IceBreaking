@@ -5,6 +5,7 @@ import (
 	"IceBreaking/model"
 	"IceBreaking/response"
 	"IceBreaking/util"
+	"fmt"
 	"github.com/go-basic/uuid"
 	"math/rand"
 	"strconv"
@@ -50,9 +51,9 @@ func GetRandStudentWithPicture(num int) response.Response {
 	for _, value := range indexs {
 		studentsRand = append(studentsRand, studentsCanBeShown[value])
 	}
-	// 将第一个学生作为天选之子，返回图片
-	// 也可以再次随机，util 里面有个 getOneRandNum
-	selectedIndex := 0
+	// 再选个学生作为天选之子，返回图片
+	selectedIndex := util.GetOneRandNum(0, num)
+	fmt.Println(selectedIndex)
 	selectedStudentUuid := studentsCanBeShown[selectedIndex].Uuid
 	picture := crud.GetPictureByStudentUuid(selectedStudentUuid)
 	return response.PictureWithStudents{Picture: &picture, Students: studentsCanBeShown}

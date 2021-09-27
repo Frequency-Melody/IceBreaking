@@ -13,6 +13,7 @@ func GetSomeRandNumber(num, start, end int) (nums []int) {
 	rand.Seed(time.Now().Unix())
 	for i < num {
 		// 循环生成随机数，若与已生成不重复，就加入
+		// 注意这里生成的数是包含边界的
 		numTemp := rand.Intn(end-start) + start
 		//st := time.Now().Unix()
 		//numTemp := int(st % int64(end-start)) + start
@@ -37,5 +38,6 @@ func contains(nums []int, target int) (exist bool) {
 }
 
 func GetOneRandNum(start, end int) (randNum int) {
-	return int(time.Now().UnixNano()%int64(end-start) + int64(start))
+	rand.Seed(time.Now().Unix())
+	return rand.Intn(end-start) + start
 }
