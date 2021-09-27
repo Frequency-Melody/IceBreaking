@@ -7,44 +7,9 @@
 4. 实现鉴权 oauth
 
 ## 二、数据库设计
-### 2.1 设计思想
-* 学生表，只存储个人信息，以及是否隐藏图片  
+* 学生表，只存储个人信息，以及是否隐藏图片，是否上传图片  
 * 图片表，存储图片在 `OSS` 中的外链地址
-* 学生与图片关联表，存储图片 id 与 学生 id  
-* 学生表 mini 版：只存放学生的 id 以及是否隐藏图片，为了随机照片的时候查表快。（其实「隐藏图片」这个属性出现两次了，可以把学生表里的那个删了）  
-### 2.2 数据库定义
-```go
-type Student struct {
-    gorm.Model
-    Name       string `gorm:"unique" binding:"required"`
-    Department string `gorm:"comment:部门" binding:"required"`
-    HidePic    bool   `gorm:"comment:是否隐藏照片"`
-}
-
-type Picture struct {
-    gorm.Model
-    Url string `gorm:"comment:图片在阿里云 OSS 中的地址"`
-    //Student   Student
-    //StudentId int
-}
-
-// 学生与照片的关联表
-// 其实一对一关系，把 StuId 放在 Picture 字段里也行
-// 但是为了防止传给前端的时候，被前端知道 StuId 不太好
-type RelationStudentPic struct {
-    gorm.Model
-    StudentId int
-    PictureId int
-}
-
-// 一张表只存学生 id，这样能快速检索到有哪些学生
-// 同时必须复制 HidePic 字段，否则可能查出的内容无效
-type StudentId struct {
-    gorm.Model
-    StudentId int
-    HidePic   bool
-}
-```
+* 学生与图片关联表，存储图片 id 与 学生 id
 ## 三、增删改查接口
 ### 3.1 随机抽取功能的实现
 这里最难的应该是，如果实现，返回一个人的照片，但同时返回多个学生信息。并且，返回的人中必须有一个是对的，剩下的是混淆，且返回的人都不能重复？

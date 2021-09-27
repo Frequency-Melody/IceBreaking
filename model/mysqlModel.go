@@ -18,6 +18,7 @@ type Student struct {
 	StaffId    int    `gorm:"unique" binding:"required" json:"staffId,omitempty"`
 	Department string `gorm:"comment:部门" binding:"required" json:"department,omitempty"`
 	HidePic    bool   `gorm:"comment:是否隐藏照片" json:"hidePic,omitempty"`
+	HasPic     bool   `gorm:"comment:是否上传了照片" json:"hasPic,omitempty"`
 }
 
 func (s Student) Error() error {
@@ -79,12 +80,4 @@ type RelationStudentPic struct {
 	ModelWithoutDelete
 	StudentUuid string `json:"studentUuid" binding:"required"`
 	PictureUuid string `json:"pictureUuid" binding:"required"`
-}
-
-// StudentVo 一张表只存学生 id，这样能快速检索到有哪些学生
-// 同时必须复制 HidePic 字段，否则可能查出的内容无效
-type StudentVo struct {
-	ModelWithoutDelete
-	StudentUuid string
-	HidePic     bool `json:"-"`
 }

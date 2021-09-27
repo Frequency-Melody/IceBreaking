@@ -3,8 +3,12 @@ package service
 import (
 	"IceBreaking/crud"
 	"IceBreaking/db"
+	"IceBreaking/log"
 	"IceBreaking/model"
 	"IceBreaking/response"
+	"bytes"
+	"io/ioutil"
+	"mime/multipart"
 )
 
 // VerifyPictureBelongToStudent 验证某个图片是否属于某个学生，并返回学生信息
@@ -22,4 +26,35 @@ func VerifyPictureBelongToStudent(pictureUuid, studentUuid string) response.Resp
 	} else {
 		return response.PictureVerifyDto{Verify: false, StudentInfo: student}
 	}
+}
+
+func UploadPictureOfStudent(picture *multipart.FileHeader, studentUuid string) response.Response {
+	student := crud.GetStudentByUuid(studentUuid)
+	if student == nil || student.Uuid == "" {
+		return response.NoStudentError
+	}
+	fileHandle, err := picture.Open()
+	if err != nil {
+		log.Sugar().Error("流文件打开错误")
+		return response.FileUploadFailedError
+	}
+	defer fileHandle.Close()
+	fileByte, _ := ioutil.ReadAll(fileHandle)
+	//上传到oss上
+	res := UploadFileToOss(picture.Filename, bytes.NewReader(fileByte))
+	// 如果报错就直接返回上传图片至阿里云时的错误
+	if res.Error() != nil {
+		return res
+	}
+	// 无果不报错，那么 res.Data() 返回的一定是 {"url": "图片url"}
+	pictureUrlMap, _ := res.Data().(map[string]string)
+	pictureUrl := pictureUrlMap["url"]
+	pictureUuid := crud.UploadPicture(pictureUrl)
+	if pictureUuid == "" {
+		return response.MysqlInsertError
+	}
+	if !crud.RelatePictureAndStudent(studentUuid, pictureUuid) {
+		return response.MysqlInsertError
+	}
+	return &response.PictureUrlDto{Url: pictureUrl}
 }

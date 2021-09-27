@@ -20,16 +20,23 @@ func GetStudentByUuid(studentUuid string) response.Response {
 
 // GetRandStudent 获取一个随机学生，unused
 func GetRandStudent() response.Response {
-	studentVos := crud.GetStudentVos()
-	index := rand.Int() % len(studentVos)
-	stu := crud.GetStudentByUuid(studentVos[index].StudentUuid)
-	return stu
+	students := crud.GetStudents()
+	index := rand.Int() % len(students)
+	return students[index]
 }
 
 // GetRandStudentWithPicture 随机 num 个学生，并且抽出一个人返回照片
 func GetRandStudentWithPicture(num int) response.Response {
-	studentIds := crud.GetStudentVos()
-	studentNum := len(studentIds)
+	// 其实这里有个细节问题，理论上，只要有一个人上传图片，剩下的很多人都没有图片也能玩
+	// 所以更合理的是计算学生总数，判断学生总数是否大于 rand num
+	// 但是这样又会导致一个问题，随机 n 个人的时候，会很麻烦
+	// 如果全抽有图片的，那会和之前利用学生总数判断的逻辑矛盾
+	// 如果抽取时不加限定，那么，不能保证抽出来的 num 个人中有人有图片
+	// 所以只能一直抽，直到 num 个人中有人有图片为止
+	// 感觉没有必要想那么多，就默认不展示图片的不参与该游戏，名字也不出现在选项中
+	// 即每次抽取的所有人，都是有图片的
+	studentsCanBeShown := crud.GetStudentsCanBeShown()
+	studentNum := len(studentsCanBeShown)
 	if studentNum < 1 {
 		return response.NoStudentError
 	}
@@ -38,17 +45,17 @@ func GetRandStudentWithPicture(num int) response.Response {
 	}
 	// 抽取 n 个 studentId （的下标），即所有需要返回的学生的信息
 	indexs := util.GetSomeRandNumber(num, 0, studentNum)
-	students := make([]*model.Student, 0, num)
+	// 随机出来的学生列表
+	studentsRand := make([]*model.Student, 0, num)
 	for _, value := range indexs {
-		student := crud.GetStudentByUuid(studentIds[value].StudentUuid)
-		students = append(students, student)
+		studentsRand = append(studentsRand, studentsCanBeShown[value])
 	}
 	// 将第一个学生作为天选之子，返回图片
 	// 也可以再次随机，util 里面有个 getOneRandNum
 	selectedIndex := 0
-	selectedStudentUuid := students[selectedIndex].Uuid
+	selectedStudentUuid := studentsCanBeShown[selectedIndex].Uuid
 	picture := crud.GetPictureByStudentUuid(selectedStudentUuid)
-	return response.PictureWithStudents{Picture: &picture, Students: students}
+	return response.PictureWithStudents{Picture: &picture, Students: studentsCanBeShown}
 }
 
 func AddStudent(student *model.Student) response.Response {
@@ -57,9 +64,6 @@ func AddStudent(student *model.Student) response.Response {
 	if err != nil {
 		return response.StudentAlreadyExistError
 	}
-	// 同步更新 StudentId 表，为了随机取学生时能快速查询
-	studentVo := model.StudentVo{StudentUuid: student.Uuid, HidePic: student.HidePic}
-	crud.AddStudentVo(studentVo)
 	return response.UuidDTO{Uuid: student.Uuid}
 }
 

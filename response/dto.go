@@ -88,3 +88,13 @@ type PictureVerifyDto struct {
 func (d PictureVerifyDto) Data() interface{} {
 	return map[string]interface{}{"verify": d.Verify, "studentInfo": d.StudentInfo}
 }
+
+// PictureUrlDto 图片在公网链接的 DTO，实现 Response 接口
+type PictureUrlDto struct {
+	BaseResponse
+	Url string
+}
+
+func (d *PictureUrlDto) Data() interface{} {
+	return map[string]string{"url": d.Url}
+}

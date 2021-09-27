@@ -23,12 +23,6 @@ func CountStudents() (count int64) {
 	return
 }
 
-// GetStudentVos 获取学生表视图，存了学生 uuid 和 是否隐藏图片信息，用来快速随机学生
-func GetStudentVos() (studentVos []*model.StudentVo) {
-	db.Get().Where(map[string]interface{}{"hide_pic": false}).Find(&studentVos)
-	return
-}
-
 func AddStudent(student *model.Student) (studentUuid string, err error) {
 	if err = db.Get().Create(student).Error; err != nil {
 		log.Sugar().Info("数据库重复插入记录, StaffId:", student.StaffId, ", Name:", student.Name)
@@ -44,9 +38,9 @@ func GetStudentByUuid(studentUuid string) (stu *model.Student) {
 	return
 }
 
-func AddStudentVo(studentVo model.StudentVo) {
-	if err := db.Get().Create(&studentVo); err != nil {
-		log.Sugar().Error("数据库插入失败, studentVo:", studentVo)
-	}
+// GetStudentsCanBeShown 获取能展示图片的学生列表，即既有图片又不隐藏图片的人
+func GetStudentsCanBeShown() (students []*model.Student) {
+	whereQuery := map[string]interface{}{"hide_pic": false, "has_pic": true}
+	SelectStudentInsensitiveFiled().Where(whereQuery).Find(&students)
 	return
 }

@@ -37,5 +37,5 @@ func DbConn() {
 //表不存在则创建
 func creatTable() {
 	db.Set("gorm:table_options", "ENGINE=InnoDB").
-		AutoMigrate(&model.Student{}, &model.Picture{}, &model.RelationStudentPic{}, &model.StudentVo{})
+		AutoMigrate(&model.Student{}, &model.Picture{}, &model.RelationStudentPic{})
 }

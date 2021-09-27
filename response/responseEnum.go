@@ -21,7 +21,8 @@ func (e ErrorType) Error() error {
 		// 查询错误
 		NoStudentError:           "学生为空",
 		StudentAlreadyExistError: "该学生已存在，请勿重复添加",
-		NoEnoughStudentError:     "请求的学生数量大于数据库含有的学生总数",
+		NoEnoughStudentError:     "分享照片的人数少于需要的随机人数",
+		MysqlInsertError:         "数据库插入错误",
 
 		//文件相关错误
 		FileTooLargeError:          "文件过大，仅支持最大 32M 文件",
@@ -52,6 +53,7 @@ func (e ErrorType) Code() int {
 		NoStudentError:           40051,
 		StudentAlreadyExistError: 40052,
 		NoEnoughStudentError:     40053,
+		MysqlInsertError:         40054,
 
 		//文件相关错误
 		FileTooLargeError:          40061,
@@ -90,6 +92,7 @@ const (
 	NoStudentError
 	StudentAlreadyExistError
 	NoEnoughStudentError
+	MysqlInsertError
 
 	//文件相关错误
 	FileTooLargeError
