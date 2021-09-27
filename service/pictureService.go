@@ -20,7 +20,7 @@ func VerifyPictureBelongToStudent(pictureUuid, studentUuid string) response.Resp
 	studentWhere := &model.Student{}
 	// 通过 id 查询完整的学生信息
 	studentWhere.Uuid = relationStudentPic.StudentUuid
-	crud.SelectStudentInsensitiveFiled().Where(studentWhere).First(student)
+	db.Get().Where(studentWhere).First(student)
 	if student.Uuid == studentUuid {
 		return response.PictureVerifyDto{Verify: true, StudentInfo: student}
 	} else {

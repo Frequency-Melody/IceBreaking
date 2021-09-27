@@ -8,6 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// SelectPictureUuidAndUrlFiled 已被 Trim 接口部分取代
 func SelectPictureUuidAndUrlFiled() *gorm.DB {
 	return db.Get().Select("url", "uuid")
 }
@@ -21,7 +22,7 @@ func GetPictureByStudentUuid(studentUuid string) (picture model.Picture) {
 func GetPictureByPictureUuid(uuid string) (picture model.Picture) {
 	pictureWhere := &model.Picture{}
 	pictureWhere.Uuid = uuid
-	SelectPictureUuidAndUrlFiled().Where(pictureWhere).First(&picture)
+	db.Get().Where(pictureWhere).First(&picture)
 	return
 }
 

@@ -2,6 +2,7 @@ package model
 
 import (
 	"IceBreaking/err"
+	"github.com/gin-gonic/gin"
 	"time"
 )
 
@@ -15,10 +16,14 @@ type ModelWithoutDelete struct {
 type Student struct {
 	ModelWithoutDelete
 	Name       string `binding:"required"`
-	StaffId    int    `gorm:"unique" binding:"required" json:"staffId,omitempty"`
-	Department string `gorm:"comment:部门" binding:"required" json:"department,omitempty"`
-	HidePic    bool   `gorm:"comment:是否隐藏照片" json:"hidePic,omitempty"`
-	HasPic     bool   `gorm:"comment:是否上传了照片" json:"hasPic,omitempty"`
+	StaffId    int    `gorm:"unique" binding:"required" json:"staffId"`
+	Department string `gorm:"comment:部门" binding:"required" json:"department"`
+	HidePic    bool   `gorm:"comment:是否隐藏照片" json:"hidePic"`
+	HasPic     bool   `gorm:"comment:是否上传了照片" json:"hasPic"`
+}
+
+func (s Student) Trim() gin.H {
+	return gin.H{"name": s.Name, "uuid": s.Uuid}
 }
 
 func (s Student) Error() error {
@@ -47,6 +52,10 @@ func (s Student) Redirect() string {
 type Picture struct {
 	ModelWithoutDelete
 	Url string `gorm:"comment:图片在阿里云 OSS 中的地址"`
+}
+
+func (p Picture) Trim() gin.H {
+	return gin.H{"uuid": p.Uuid, "url": p.Url}
 }
 
 func (p Picture) Error() error {

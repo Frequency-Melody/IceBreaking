@@ -98,3 +98,5 @@ type PictureUrlDto struct {
 func (d *PictureUrlDto) Data() interface{} {
 	return map[string]string{"url": d.Url}
 }
+
+
