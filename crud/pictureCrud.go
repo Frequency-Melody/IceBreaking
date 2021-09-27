@@ -5,8 +5,13 @@ import (
 	"IceBreaking/log"
 	"IceBreaking/model"
 	"github.com/go-basic/uuid"
+	"gorm.io/gorm"
 )
 
+
+func SelectPictureUuidAndUrlFiled() *gorm.DB {
+	return db.Get().Select("url", "uuid")
+}
 func GetPictureByStudentUuid(studentUuid string) (picture model.Picture) {
 	rsp := &model.RelationStudentPic{}
 	db.Get().Where(&model.RelationStudentPic{StudentUuid: studentUuid}).First(&rsp)
@@ -17,7 +22,7 @@ func GetPictureByStudentUuid(studentUuid string) (picture model.Picture) {
 func GetPictureByPictureUuid(uuid string) (picture model.Picture) {
 	pictureWhere := &model.Picture{}
 	pictureWhere.Uuid = uuid
-	db.Get().Where(pictureWhere).First(&picture)
+	SelectPictureUuidAndUrlFiled().Where(pictureWhere).First(&picture)
 	return
 }
 
