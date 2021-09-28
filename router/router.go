@@ -21,7 +21,7 @@ func initRouter() {
 
 		groupStudent.GET("/id", requestEntry(controller.GetStudentByUuid))
 
-		groupStudent.GET("/rand", requestEntry(controller.GetRandStudentWithPicture))
+		groupStudent.GET("/rand", requestEntry(controller.GetRandStudentsWithPicture))
 
 		groupStudent.POST("/add", requestEntry(controller.AddStudent))
 

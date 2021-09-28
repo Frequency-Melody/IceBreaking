@@ -29,6 +29,9 @@ func (e ErrorType) Error() error {
 		NotImageError:              "仅支持上传图片",
 		FileUploadFailedError:      "文件上传错误",
 		FileUploadToOssFailedError: "文件上传到阿里云 OSS 失败",
+
+		//服务器错误
+		ServerUnknownError: "服务器内部错误",
 	}
 	if m, ok := errorMsg[e]; ok {
 		return errors.New(m)
@@ -60,6 +63,9 @@ func (e ErrorType) Code() int {
 		NotImageError:              40062,
 		FileUploadFailedError:      40063,
 		FileUploadToOssFailedError: 40064,
+
+		//其他错误
+		ServerUnknownError: 50001,
 	}
 	if code, ok := errorCode[e]; ok {
 		return code
@@ -99,4 +105,7 @@ const (
 	NotImageError
 	FileUploadFailedError
 	FileUploadToOssFailedError
+
+	//服务器错误
+	ServerUnknownError
 )

@@ -6,6 +6,7 @@ import (
 	"IceBreaking/log"
 	"IceBreaking/model"
 	"IceBreaking/response"
+	"IceBreaking/response/dto"
 	"bytes"
 	"io/ioutil"
 	"mime/multipart"
@@ -20,11 +21,11 @@ func VerifyPictureBelongToStudent(pictureUuid, studentUuid string) response.Resp
 	studentWhere := &model.Student{}
 	// 通过 id 查询完整的学生信息
 	studentWhere.Uuid = relationStudentPic.StudentUuid
-	crud.SelectStudentInsensitiveFiled().Where(studentWhere).First(student)
+	db.Get().Where(studentWhere).First(student)
 	if student.Uuid == studentUuid {
-		return response.PictureVerifyDto{Verify: true, StudentInfo: student}
+		return dto.PictureVerifyDto{Verify: true, StudentInfo: student}
 	} else {
-		return response.PictureVerifyDto{Verify: false, StudentInfo: student}
+		return dto.PictureVerifyDto{Verify: false, StudentInfo: student}
 	}
 }
 
@@ -34,7 +35,6 @@ func UploadPictureOfStudent(picture *multipart.FileHeader, studentUuid string) r
 	if student == nil || student.Uuid == "" {
 		return response.NoStudentError
 	}
-	// 打开图片
 	fileHandle, err := picture.Open()
 	if err != nil {
 		log.Sugar().Error("流文件打开错误")
@@ -42,7 +42,6 @@ func UploadPictureOfStudent(picture *multipart.FileHeader, studentUuid string) r
 	}
 	defer fileHandle.Close()
 	fileByte, _ := ioutil.ReadAll(fileHandle)
-	// 将图片上传到oss上
 	res := UploadFileToOss(picture.Filename, bytes.NewReader(fileByte))
 	// 如果报错就直接返回上传图片至阿里云时的错误
 	if res.Error() != nil {
@@ -51,16 +50,13 @@ func UploadPictureOfStudent(picture *multipart.FileHeader, studentUuid string) r
 	// 无果不报错，那么 res.Data() 返回的一定是 {"url": "图片url"}
 	pictureUrlMap, _ := res.Data().(map[string]string)
 	pictureUrl := pictureUrlMap["url"]
-	// 在 picture 表中添加图片记录
 	pictureUuid := crud.UploadPicture(pictureUrl)
 	if pictureUuid == "" {
 		return response.MysqlInsertError
 	}
-	// 在学生-图片关联表中添加记录
 	if !crud.CreateOrUpdateRelationOfPictureAndStudent(studentUuid, pictureUuid) {
 		return response.MysqlInsertError
 	}
-	// 更新学生表，指明该学生上传了照片
 	crud.UpdateStudentHasPic(student, true)
-	return &response.PictureUrlDto{Url: pictureUrl}
+	return &dto.PictureUrlDto{Url: pictureUrl}
 }

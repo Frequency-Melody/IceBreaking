@@ -25,7 +25,7 @@ func GetStudentByUuid(c *gin.Context) response.Response {
 	}
 }
 
-func GetRandStudentWithPicture(c *gin.Context) response.Response {
+func GetRandStudentsWithPicture(c *gin.Context) response.Response {
 	// num 是每次返回的学生的数量，且不得小于 MIN_RAND_NUM
 	numString := c.DefaultQuery("num", "")
 	if numString == "" {
@@ -38,7 +38,7 @@ func GetRandStudentWithPicture(c *gin.Context) response.Response {
 	if num < MIN_RAND_NUM {
 		return response.RandNumTooSmallError
 	}
-	return service.GetRandStudentWithPicture(num)
+	return service.GetRandStudentsWithPicture(num)
 }
 
 func AddStudent(c *gin.Context) response.Response {

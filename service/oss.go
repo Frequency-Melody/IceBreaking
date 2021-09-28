@@ -4,6 +4,7 @@ import (
 	"IceBreaking/config"
 	"IceBreaking/log"
 	"IceBreaking/response"
+	"IceBreaking/response/dto"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"io"
 	"net/url"
@@ -51,5 +52,5 @@ func UploadFileToOss(filename string, fd io.Reader) response.Response {
 		log.Sugar().Error("文件上传到 OSS 失败，文件名：", filename, ", 错误信息:", err)
 		return response.FileUploadToOssFailedError
 	}
-	return &response.PictureUrlDto{Url: pictureUrl}
+	return &dto.PictureUrlDto{Url: pictureUrl}
 }
