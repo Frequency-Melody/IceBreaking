@@ -8,11 +8,15 @@ import (
 type Router struct {
 }
 
-func (r *Router) Init() {
-	initRouter()
+func (r *Router) Run(port int) {
+	initRouter(port)
 }
 
-func initRouter() {
+func initRouter(port int) {
+	// [端口范围](https://blog.csdn.net/yyj108317/article/details/81134241)
+	if port < 5000 || port > 65535 {
+		panic("非法端口")
+	}
 	r := gin.Default()
 	//student
 	groupStudent := r.Group("/student")
@@ -37,6 +41,6 @@ func initRouter() {
 		groupPicture.POST("/upload", requestEntry(controller.UploadPicture))
 	}
 
-	err := r.Run()
+	err := r.Run(":" + string(rune(port)))
 	panic(err)
 }
