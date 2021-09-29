@@ -12,6 +12,13 @@ const (
 	MIN_RAND_NUM = 2 // 每次最少随机的人数
 )
 
+// @Summary 获取所有学生
+// @Description 获取所有学生
+// @Accept json
+// @Produce  json
+// @Success 200 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Router /student/all [get]
 func GetStudents(c *gin.Context) response.Response {
 	return service.GetStudents()
 }

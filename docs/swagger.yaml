@@ -1,0 +1,31 @@
+basePath: /ice`
+host: http://api.aflybird.cn:8090`
+info:
+  contact:
+    email: li_hepeng@qq.com`
+    name: BirdBirdLee`
+    url: '[http://www.swagger.io/support](http://www.swagger.io/support)`'
+  description: 认人脸后端`
+  license:
+    name: Apache 2.0`
+    url: '[http://www.apache.org/licenses/LICENSE-2.0.html](http://www.apache.org/licenses/LICENSE-2.0.html)`'
+  termsOfService: '[http://swagger.io/terms/](http://swagger.io/terms/)`'
+  title: 认人脸后端`
+  version: 1.0`
+paths:
+  /student/all:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有学生
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema: {}
+        "400":
+          description: Bad Request
+          schema: {}
+      summary: 获取所有学生
+swagger: "2.0"

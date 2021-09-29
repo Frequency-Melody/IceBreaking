@@ -1,0 +1,44 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "认人脸后端`",
+        "title": "认人脸后端`",
+        "termsOfService": "[http://swagger.io/terms/](http://swagger.io/terms/)`",
+        "contact": {
+            "name": "BirdBirdLee`",
+            "url": "[http://www.swagger.io/support](http://www.swagger.io/support)`",
+            "email": "li_hepeng@qq.com`"
+        },
+        "license": {
+            "name": "Apache 2.0`",
+            "url": "[http://www.apache.org/licenses/LICENSE-2.0.html](http://www.apache.org/licenses/LICENSE-2.0.html)`"
+        },
+        "version": "1.0`"
+    },
+    "host": "http://api.aflybird.cn:8090`",
+    "basePath": "/ice`",
+    "paths": {
+        "/student/all": {
+            "get": {
+                "description": "获取所有学生",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "获取所有学生",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {}
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    }
+                }
+            }
+        }
+    }
+}
