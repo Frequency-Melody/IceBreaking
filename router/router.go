@@ -19,6 +19,8 @@ func initRouter(port int) {
 		panic("非法端口")
 	}
 	r := gin.Default()
+	r.Use(Cors())
+
 	//student
 	groupStudent := r.Group("/student")
 	{
