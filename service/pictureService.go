@@ -22,10 +22,11 @@ func VerifyPictureBelongToStudent(pictureUuid, studentUuid string) response.Resp
 	// 通过 id 查询完整的学生信息
 	studentWhere.Uuid = relationStudentPic.StudentUuid
 	db.Get().Where(studentWhere).First(student)
+	studentUuidNameDto := &dto.StudentUuidNameDto{Uuid: student.Uuid, Name: student.Name}
 	if student.Uuid == studentUuid {
-		return dto.PictureVerifyDto{Verify: true, StudentInfo: student}
+		return dto.PictureVerifyDto{Verify: true, StudentInfo: studentUuidNameDto}
 	} else {
-		return dto.PictureVerifyDto{Verify: false, StudentInfo: student}
+		return dto.PictureVerifyDto{Verify: false, StudentInfo: studentUuidNameDto}
 	}
 }
 

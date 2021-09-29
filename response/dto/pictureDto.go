@@ -2,7 +2,6 @@ package dto
 
 import (
 	"IceBreaking/err"
-	"IceBreaking/model"
 	"IceBreaking/response"
 )
 
@@ -38,7 +37,7 @@ func (p PictureWithStudents) Redirect() string {
 type PictureVerifyDto struct {
 	response.BaseResponse `json:"-"`
 	Verify                bool
-	StudentInfo           *model.Student
+	StudentInfo           *StudentUuidNameDto
 }
 
 func (d PictureVerifyDto) Data() interface{} {
