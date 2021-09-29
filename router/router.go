@@ -3,6 +3,7 @@ package router
 import (
 	"IceBreaking/controller"
 	"github.com/gin-gonic/gin"
+	"strconv"
 )
 
 type Router struct {
@@ -41,6 +42,6 @@ func initRouter(port int) {
 		groupPicture.POST("/upload", requestEntry(controller.UploadPicture))
 	}
 
-	err := r.Run(":" + string(rune(port)))
+	err := r.Run(":" + strconv.Itoa(port))
 	panic(err)
 }
