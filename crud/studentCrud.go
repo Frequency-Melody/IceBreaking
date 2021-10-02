@@ -23,18 +23,24 @@ func CountStudents() (count int64) {
 	return
 }
 
-func AddStudent(student *model.Student) (studentUuid string, err error) {
+func AddStudent(student *model.Student) (err error) {
+	student.Uuid = uuid.New()
 	if err = db.Get().Create(student).Error; err != nil {
 		log.Sugar().Info("数据库重复插入记录, StaffId:", student.StaffId, ", Name:", student.Name)
-		return uuid.New(), err
+		return err
 	}
-	return student.Uuid, nil
+	return nil
 }
 
 func GetStudentByUuid(studentUuid string) (stu *model.Student) {
 	studentWhere := &model.Student{}
 	studentWhere.Uuid = studentUuid
 	db.Get().Where(studentWhere).First(&stu)
+	return
+}
+
+func GetStudentByStaffId(staffId string) (stu *model.Student) {
+	db.Get().Where(&model.Student{StaffId: staffId}).First(&stu)
 	return
 }
 

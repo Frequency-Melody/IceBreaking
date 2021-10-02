@@ -22,10 +22,9 @@ func VerifyPictureBelongToStudent(c *gin.Context) response.Response {
 }
 
 func UploadPicture(c *gin.Context) response.Response {
-	studentUuid := c.PostForm("studentUuid")
-	if studentUuid == "" {
-		return response.LackStudentUuidParamError
-	}
+	//studentUuid := c.PostForm("studentUuid")
+	studentUuidInterface, _ := c.Get("uuid")
+	studentUuid := studentUuidInterface.(string)
 	_, picture, err := c.Request.FormFile("picture")
 	if err != nil {
 		log.Sugar().Error("获取上传文件失败: %v", err)

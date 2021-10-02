@@ -1,7 +1,7 @@
 package dto
 
 import (
-	"IceBreaking/err"
+	"IceBreaking/errs"
 	"IceBreaking/response"
 )
 
@@ -13,7 +13,7 @@ type PictureWithStudents struct {
 
 func (p PictureWithStudents) Error() error {
 	if p.Picture.Uuid == "" {
-		return err.DataEmptyError()
+		return errs.DataEmptyError()
 	}
 	return nil
 }

@@ -2,6 +2,7 @@ package router
 
 import (
 	"IceBreaking/controller"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
@@ -15,14 +16,25 @@ func (r *Router) Run(port int) {
 
 func initRouter(port int) {
 	// [端口范围](https://blog.csdn.net/yyj108317/article/details/81134241)
+	fmt.Println(port)
 	if port < 5000 || port > 65535 {
 		panic("非法端口")
 	}
 	r := gin.Default()
 	r.Use(Cors())
+	//r.Use(Auth())
+
+	//auth
+	groupRedirect := r.Group("/auth")
+	{
+		groupRedirect.GET("/auth", controller.Auth)
+		groupRedirect.GET("/login", controller.Login)
+		groupRedirect.GET("/validate", requestEntry(controller.Validate))
+	}
 
 	//student
 	groupStudent := r.Group("/student")
+	groupStudent.Use(Auth())
 	{
 		groupStudent.GET("/all", requestEntry(controller.GetStudents))
 
@@ -38,6 +50,7 @@ func initRouter(port int) {
 
 	//picture
 	groupPicture := r.Group("/picture")
+	groupPicture.Use(Auth())
 	{
 		groupPicture.GET("/verify", requestEntry(controller.VerifyPictureBelongToStudent))
 

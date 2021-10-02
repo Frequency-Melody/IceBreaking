@@ -6,7 +6,6 @@ import (
 	"IceBreaking/response"
 	"IceBreaking/response/dto"
 	"IceBreaking/util"
-	"github.com/go-basic/uuid"
 	"math/rand"
 	"strconv"
 )
@@ -71,8 +70,7 @@ func GetRandStudentsWithPicture(num int) response.Response {
 }
 
 func AddStudent(student *model.Student) response.Response {
-	student.Uuid = uuid.New()
-	_, err := crud.AddStudent(student)
+	err := crud.AddStudent(student)
 	if err != nil {
 		return response.StudentAlreadyExistError
 	}

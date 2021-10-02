@@ -1,7 +1,7 @@
 package dto
 
 import (
-	"IceBreaking/err"
+	"IceBreaking/errs"
 	"IceBreaking/response"
 )
 
@@ -35,7 +35,7 @@ func (d *CountDto) Data() interface{} {
 
 func (d *CountDto) Error() error {
 	if d.Count == "" {
-		return err.MysqlQueryError()
+		return errs.MysqlQueryError()
 	}
 	return nil
 }

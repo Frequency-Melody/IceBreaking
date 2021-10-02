@@ -40,4 +40,9 @@ func initConfig() {
 	//c.OSS.EndPoint = os.Getenv("OSS_ENDPOINT")
 	c.OSS.AccessKeyId = os.Getenv("OSS_ACCESS_KEY_ID")
 	c.OSS.AccessKeySecret = os.Getenv("OSS_ACCESS_KEY_SECRET")
+
+	// 杭电助手鉴权相关
+	c.Hduhelp.ClientId = os.Getenv("HDUHELP_CLIENT_ID")
+	c.Hduhelp.ClientSecret = os.Getenv("HDUHELP_CLIENT_SECRET")
+
 }

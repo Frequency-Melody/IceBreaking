@@ -1,6 +1,11 @@
 package response
 
-import "errors"
+import (
+	"IceBreaking/config"
+	"errors"
+	"github.com/go-basic/uuid"
+	"net/url"
+)
 
 // ErrorType 实现 response.Response 接口
 type ErrorType uint
@@ -9,6 +14,9 @@ func (e ErrorType) Error() error {
 	errorMsg := map[ErrorType]string{
 		// 成功
 		Success: "OK",
+
+		// 跳转
+		RedirectToHduhelp: "跳转到杭电助手授权",
 
 		// 参数错误
 		ParamError:                "参数错误",
@@ -24,13 +32,18 @@ func (e ErrorType) Error() error {
 		NoEnoughStudentError:     "分享照片的人数少于需要的随机人数",
 		MysqlInsertError:         "数据库插入错误",
 
-		//文件相关错误
+		// 文件相关错误
 		FileTooLargeError:          "文件过大，仅支持最大 32M 文件",
 		NotImageError:              "仅支持上传图片",
 		FileUploadFailedError:      "文件上传错误",
 		FileUploadToOssFailedError: "文件上传到阿里云 OSS 失败",
 
-		//服务器错误
+		// 鉴权错误
+		LackAuthorizeTokenError: "AuthorizeToken 缺失",
+		AuthorizeFailed:         "鉴权失败",
+		InvalidTokenError:       "无效的 token",
+
+		// 服务器错误
 		ServerUnknownError: "服务器内部错误",
 	}
 	if m, ok := errorMsg[e]; ok {
@@ -44,6 +57,10 @@ func (e ErrorType) Code() int {
 	errorCode := map[ErrorType]int{
 		// 成功
 		Success: 20000,
+
+		// 跳转
+		RedirectToHduhelp: 30200,
+
 		// 参数错误
 		ParamError:                40001,
 		RandNumTooSmallError:      40002,
@@ -64,6 +81,11 @@ func (e ErrorType) Code() int {
 		FileUploadFailedError:      40063,
 		FileUploadToOssFailedError: 40064,
 
+		//鉴权错误
+		LackAuthorizeTokenError: 40100,
+		AuthorizeFailed:         40101,
+		InvalidTokenError:       40102,
+
 		//其他错误
 		ServerUnknownError: 50001,
 	}
@@ -79,12 +101,33 @@ func (e ErrorType) Data() interface{} {
 }
 
 func (e ErrorType) Redirect() string {
-	return ""
+	query := make(url.Values)
+	query.Add("response_type", "code")
+	query.Add("client_id", config.Get().Hduhelp.ClientId)
+	query.Add("redirect_uri", "http://localhost:8091/auth/auth")
+	query.Add("state", uuid.New())
+	redirectUrl := url.URL{
+		Scheme:   "https",
+		Host:     "api.hduhelp.com",
+		Path:     "/oauth/authorize",
+		RawQuery: query.Encode(),
+	}
+	redirectMap := map[ErrorType]string{
+		RedirectToHduhelp: redirectUrl.String(),
+	}
+	if reqUrl, ok := redirectMap[e]; ok {
+		return reqUrl
+	} else {
+		return ""
+	}
 }
 
 const (
 	// 成功
 	Success ErrorType = iota
+
+	// 跳转
+	RedirectToHduhelp
 
 	// 参数错误
 	ParamError
@@ -105,6 +148,11 @@ const (
 	NotImageError
 	FileUploadFailedError
 	FileUploadToOssFailedError
+
+	//鉴权错误
+	LackAuthorizeTokenError
+	AuthorizeFailed
+	InvalidTokenError
 
 	//服务器错误
 	ServerUnknownError

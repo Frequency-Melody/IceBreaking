@@ -1,7 +1,7 @@
 package model
 
 import (
-	"IceBreaking/err"
+	"IceBreaking/errs"
 	"time"
 )
 
@@ -15,7 +15,7 @@ type ModelWithoutDelete struct {
 type Student struct {
 	ModelWithoutDelete
 	Name       string `binding:"required"`
-	StaffId    int    `gorm:"unique" binding:"required" json:"staffId"`
+	StaffId    string `gorm:"unique" binding:"required" json:"staffId"`
 	Department string `gorm:"comment:部门" binding:"required" json:"department"`
 	HidePic    bool   `gorm:"comment:是否隐藏照片" json:"hidePic"`
 	HasPic     bool   `gorm:"comment:是否上传了照片" json:"hasPic"`
@@ -23,7 +23,7 @@ type Student struct {
 
 func (s Student) Error() error {
 	if s.Uuid == "" {
-		return err.DataEmptyError()
+		return errs.DataEmptyError()
 	}
 	return nil
 }
@@ -51,7 +51,7 @@ type Picture struct {
 
 func (p Picture) Error() error {
 	if p.Uuid == "" {
-		return err.DataEmptyError()
+		return errs.DataEmptyError()
 	}
 	return nil
 }

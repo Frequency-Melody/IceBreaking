@@ -15,5 +15,5 @@ import "IceBreaking/router"
 // @BasePath /ice`
 func main() {
 	r := router.Router{}
-	r.Run(8090)
+	r.Run(8091)
 }

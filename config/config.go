@@ -1,8 +1,10 @@
 package config
 
 type config struct {
-	Mysql Mysql
-	OSS   OSS
+	Mysql   Mysql
+	OSS     OSS
+	Hduhelp Hduhelp
+	FrontEnd FrontEnd
 }
 
 type Mysql struct {
@@ -18,4 +20,14 @@ type OSS struct {
 	AccessKeyId     string
 	AccessKeySecret string
 	BucketName      string
+}
+
+type Hduhelp struct {
+	ClientId     string
+	ClientSecret string
+}
+
+type FrontEnd struct {
+	Home string
+	AuthFailedUrl string
 }
