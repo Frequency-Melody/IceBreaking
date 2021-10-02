@@ -1,9 +1,9 @@
 # 杭电助手破冰认人脸系统-后端
 ## 一、功能简介
-接入杭电助手 `OAuth2` ，登录智慧杭电账号。  
-用户可上传自己的照片信息，并决定是否参与认人脸游戏。  
-每次向前端返回 `n` 个学生信息，与一张照片，该照片属于 `n` 个学生之一。  
-用户在前端从 `n` 个选项中选择一个，前端通过学生与照片的 `uuid` 向后端校验
+* 登   录：接入杭电助手 `OAuth2` ，登录智慧杭电账号。  
+* 照片上传：用户可上传自己的照片信息，并决定是否参与认人脸游戏。  
+* 随机人脸：每次向前端随机返回 `n` 个学生信息，与一张照片，该照片属于 `n` 个学生之一。  
+* 选项校验：用户在前端从 `n` 个选项中选择一个，前端通过学生与照片的 `uuid` 向后端校验正确与否。
 
 ## 二、环境与配置
 ### 2.1 编译环境
@@ -63,7 +63,8 @@ Authorization: token abcd12345
 #### 3.3.1 `POST` /picture/upload 图片上传
 使用 `form-data` 上传图片， 格式：`picture`: 图片文件
 
-重复上传可覆盖原有照片。
+重复上传可覆盖原有照片。  
+
 Response Body 中的 `Data`：
 ```json
 {
@@ -79,6 +80,7 @@ PostMan 示例：
 #### 3.3.2 `GET` /student/rand 随机人脸与学生姓名选项
 Query Param:
 * num ：数字。含义为选项的数量，需大于等于2。
+
 Response Body 中的 Data：
 ```json
 {
@@ -103,12 +105,13 @@ PostMan 示例：
 
 ![image-20211002142329876](https://bird-notes.oss-cn-hangzhou.aliyuncs.com/img/image-20211002142329876.png)
 
-#### 3.3.3 `POST` /picture/verify 验证照片是否属于某学生
+#### 3.3.3 `GET` /picture/verify 验证照片是否属于某学生
 传入照片和学生的 `uuid`,验证是否匹配，并返回该照片对应的正确学生的名字。  
 无论正确与否， `Error` 都是 `20000`，请根据返回体中的 `verify` 字段判断选项是否正确。  
 Query Param：
 * pictureUuid: 随机时得到的照片的 uuid
 * studentUuid：用户选择的学生对应的 uuid
+
 Response Body 中的 Data：
 ```json
 {
