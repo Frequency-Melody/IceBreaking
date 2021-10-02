@@ -2,6 +2,8 @@ package model
 
 import (
 	"IceBreaking/errs"
+	"github.com/go-basic/uuid"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -16,9 +18,14 @@ type Student struct {
 	ModelWithoutDelete
 	Name       string `binding:"required"`
 	StaffId    string `gorm:"unique" binding:"required" json:"staffId"`
-	Department string `gorm:"comment:部门" binding:"required" json:"department"`
+	Department string `gorm:"comment:部门" json:"department"`
 	HidePic    bool   `gorm:"comment:是否隐藏照片" json:"hidePic"`
 	HasPic     bool   `gorm:"comment:是否上传了照片" json:"hasPic"`
+}
+
+func (s Student) BeforeCreate(db *gorm.DB) error {
+	s.Uuid = uuid.New()
+	return nil
 }
 
 func (s Student) Error() error {
@@ -47,6 +54,11 @@ func (s Student) Redirect() string {
 type Picture struct {
 	ModelWithoutDelete
 	Url string `gorm:"comment:图片在阿里云 OSS 中的地址"`
+}
+
+func (p Picture) BeforeCreate(db *gorm.DB) error {
+	p.Uuid = uuid.New()
+	return nil
 }
 
 func (p Picture) Error() error {
@@ -81,3 +93,9 @@ type RelationStudentPic struct {
 	StudentUuid string `json:"studentUuid" binding:"required"`
 	PictureUuid string `json:"pictureUuid" binding:"required"`
 }
+
+func (r RelationStudentPic) BeforeCreate(db *gorm.DB) error {
+	r.Uuid = uuid.New()
+	return nil
+}
+
