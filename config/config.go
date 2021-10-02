@@ -1,9 +1,9 @@
 package config
 
 type config struct {
-	Mysql   Mysql
-	OSS     OSS
-	Hduhelp Hduhelp
+	Mysql    Mysql
+	OSS      OSS
+	Hduhelp  Hduhelp
 	FrontEnd FrontEnd
 }
 
@@ -28,6 +28,6 @@ type Hduhelp struct {
 }
 
 type FrontEnd struct {
-	Home string
+	Home          string
 	AuthFailedUrl string
 }

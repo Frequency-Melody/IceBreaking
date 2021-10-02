@@ -12,7 +12,7 @@ import (
 )
 
 // Auth 助手登录后回调此方法，此方法最后会将前端重定向至业务首页，将将 token 和 学生姓名附在 query 中
-func Auth(c *gin.Context)  {
+func Auth(c *gin.Context) {
 	code := c.Query("code")
 	state := c.Query("state")
 	token := service.Code2Token(code, state)
@@ -37,7 +37,7 @@ func Auth(c *gin.Context)  {
 }
 
 // Login 前端执行登录操作，跳转至助手授权页，再由助手跳转到 Auth（即上面那个函数）
-func Login(c *gin.Context)  {
+func Login(c *gin.Context) {
 	c.Redirect(http.StatusFound, response.RedirectToHduhelp.Redirect())
 }
 

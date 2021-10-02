@@ -69,7 +69,6 @@ func LoginDatabase(staffId, name string) (studentUuid string, err error) {
 	}
 }
 
-
 // Validate 校验 token 合法性，并返回学生在本库中的 uuid
 func Validate(token string) (uuid string, err error) {
 	reqUrl := url.URL{
