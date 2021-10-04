@@ -29,8 +29,9 @@ HDUHELP_CLIENT_SECRET
 
 ## 三、API 文档
 ### 3.1 总体
-base URL : http://HOST:8091/  
+~~base URL : http://HOST:8091/~~
 建议部署时使用反向代理
+base URL ：https://tcualhp.cn/ice/v2.0/
 
 除登录外，所有请求都需要带上鉴权请求头，若 `token` 值为 `abcd12345`，则请求头为:
 ```yaml
@@ -126,4 +127,23 @@ Response Body 中的 Data：
 ```
 
 #### 3.4 参与/退出 认人脸游戏
-还没写，目前默认全部参加，想退出？不可能的！不给你机会（接口）
+若参加，则 隐藏人脸 字段 `hide_pic` 为 `false`
+~~还没写，目前默认全部参加，想退出？不可能的！不给你机会（接口）~~
+### 3.4.1 `GET` /student/status 获取是否参加状态
+无 Query Param
+Response Body 中的 Data：
+```json
+{
+  "Data": {
+    "hide_pic": false
+  }
+}
+```
+
+### 3.4.2 `POST` /student/status 修改是否参加状态
+payload:
+```json
+{
+  "hide_pic": false // false 为不隐藏，参加游戏
+}
+```
