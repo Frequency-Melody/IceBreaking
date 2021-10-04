@@ -29,9 +29,9 @@ HDUHELP_CLIENT_SECRET
 
 ## 三、API 文档
 ### 3.1 总体
-~~base URL : http://HOST:8091/~~
-建议部署时使用反向代理
-base URL ：https://tcualhp.cn/ice/v2.0/
+已部署, base URL ：https://tcualhp.cn/ice/v2.0/  
+
+（还有个[旧版 v1.0 不含鉴权](./API_Reference_v1.0.md)）
 
 除登录外，所有请求都需要带上鉴权请求头，若 `token` 值为 `abcd12345`，则请求头为:
 ```yaml
