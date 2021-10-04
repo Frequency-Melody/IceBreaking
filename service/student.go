@@ -80,3 +80,12 @@ func AddStudent(student *model.Student) response.Response {
 func CountStudents() response.Response {
 	return &dto.CountDto{Count: strconv.FormatInt(crud.CountStudents(), 10)}
 }
+
+func GetPictureStatus(studentUuid string) response.Response  {
+	return  &dto.HidePicDto{HidePic: crud.GetStudentByUuid(studentUuid).HidePic}
+}
+
+func UpdatePictureStatus(studentUuid string, hidePic bool) response.Response {
+	crud.UpdatePictureStatus(studentUuid, hidePic)
+	return response.Success
+}

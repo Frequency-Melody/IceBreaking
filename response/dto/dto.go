@@ -15,7 +15,7 @@ type JsonResponse struct {
 
 // UuidDTO 使 Uuid 单变量 实现 Response 接口
 type UuidDTO struct {
-	response.BaseResponse
+	response.BaseResponse `json:"-"`
 	Uuid string
 }
 
@@ -25,7 +25,7 @@ func (d UuidDTO) Data() interface{} {
 
 // CountDto 数量 实现 Response 接口
 type CountDto struct {
-	response.BaseResponse
+	response.BaseResponse `json:"-"`
 	Count string // 这里要用 string，因为 int 的默认值是 0，无法判断数据库查询是否成功
 }
 
@@ -38,4 +38,13 @@ func (d *CountDto) Error() error {
 		return errs.MysqlQueryError()
 	}
 	return nil
+}
+
+type HidePicDto struct {
+	response.BaseResponse `json:"-"`
+	HidePic bool `json:"hide_pic"`
+}
+
+func (d *HidePicDto) Data() interface{} {
+	return d
 }

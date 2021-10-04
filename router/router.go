@@ -38,6 +38,7 @@ func initRouter(port int) {
 	{
 		groupStudent.GET("/all", requestEntry(controller.GetStudents))
 
+		// 获取自己的信息
 		groupStudent.GET("/id", requestEntry(controller.GetStudentByUuid))
 
 		groupStudent.GET("/rand", requestEntry(controller.GetRandStudentsWithPicture))
@@ -45,6 +46,12 @@ func initRouter(port int) {
 		groupStudent.POST("/add", requestEntry(controller.AddStudent))
 
 		groupStudent.GET("/count", requestEntry(controller.CountStudents))
+
+		// 获取某用户是否隐藏图片这一信息
+		groupStudent.GET("/status", requestEntry(controller.GetPictureStatus))
+
+		// 更新某用户是否隐藏图片这一信息
+		groupStudent.POST("/status", requestEntry(controller.UpdatePictureStatus))
 
 	}
 

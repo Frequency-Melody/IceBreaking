@@ -54,3 +54,8 @@ func GetStudentsCanBeShown() (students []*model.Student) {
 func UpdateStudentHasPic(student *model.Student, hasPic bool) {
 	db.Get().Model(&student).Update("has_pic", hasPic)
 }
+
+func UpdatePictureStatus(studentUuid string, hidePic bool)  {
+	student := GetStudentByUuid(studentUuid)
+	db.Get().Model(&student).Update("hide_pic", hidePic)
+}
