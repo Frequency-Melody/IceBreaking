@@ -4,7 +4,6 @@ import (
 	"IceBreaking/db"
 	"IceBreaking/log"
 	"IceBreaking/model"
-	"github.com/go-basic/uuid"
 	"gorm.io/gorm"
 )
 
@@ -24,7 +23,7 @@ func CountStudents() (count int64) {
 }
 
 func AddStudent(student *model.Student) (err error) {
-	student.Uuid = uuid.New()
+	//student.Uuid = uuid.New()
 	if err = db.Get().Create(student).Error; err != nil {
 		log.Sugar().Info("数据库重复插入记录, StaffId:", student.StaffId, ", Name:", student.Name)
 		return err

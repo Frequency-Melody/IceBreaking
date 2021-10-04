@@ -23,7 +23,7 @@ type Student struct {
 	HasPic     bool   `gorm:"comment:是否上传了照片" json:"hasPic"`
 }
 
-func (s Student) BeforeCreate(db *gorm.DB) error {
+func (s *Student) BeforeCreate(db *gorm.DB) error {
 	s.Uuid = uuid.New()
 	return nil
 }
@@ -56,7 +56,7 @@ type Picture struct {
 	Url string `gorm:"comment:图片在阿里云 OSS 中的地址"`
 }
 
-func (p Picture) BeforeCreate(db *gorm.DB) error {
+func (p *Picture) BeforeCreate(db *gorm.DB) error {
 	p.Uuid = uuid.New()
 	return nil
 }
@@ -94,7 +94,7 @@ type RelationStudentPic struct {
 	PictureUuid string `json:"pictureUuid" binding:"required"`
 }
 
-func (r RelationStudentPic) BeforeCreate(db *gorm.DB) error {
+func (r *RelationStudentPic) BeforeCreate(db *gorm.DB) error {
 	r.Uuid = uuid.New()
 	return nil
 }
