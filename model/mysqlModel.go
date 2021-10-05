@@ -2,9 +2,10 @@ package model
 
 import (
 	"IceBreaking/errs"
+	"time"
+
 	"github.com/go-basic/uuid"
 	"gorm.io/gorm"
-	"time"
 )
 
 type ModelWithoutDelete struct {
@@ -21,6 +22,7 @@ type Student struct {
 	Department string `gorm:"comment:部门" json:"department"`
 	HidePic    bool   `gorm:"comment:是否隐藏照片" json:"hidePic"`
 	HasPic     bool   `gorm:"comment:是否上传了照片" json:"hasPic"`
+	Http       string
 }
 
 func (s *Student) BeforeCreate(db *gorm.DB) error {
@@ -30,7 +32,7 @@ func (s *Student) BeforeCreate(db *gorm.DB) error {
 
 func (s Student) Error() error {
 	if s.Uuid == "" {
-		return errs.DataEmptyError()
+		return errs.DataEmptyError
 	}
 	return nil
 }
@@ -63,7 +65,7 @@ func (p *Picture) BeforeCreate(db *gorm.DB) error {
 
 func (p Picture) Error() error {
 	if p.Uuid == "" {
-		return errs.DataEmptyError()
+		return errs.DataEmptyError
 	}
 	return nil
 }
@@ -98,4 +100,3 @@ func (r *RelationStudentPic) BeforeCreate(db *gorm.DB) error {
 	r.Uuid = uuid.New()
 	return nil
 }
-

@@ -55,7 +55,7 @@ func CountStudents(c *gin.Context) response.Response {
 }
 
 // GetPictureStatus 获取图片显隐状态
-func GetPictureStatus(c *gin.Context) response.Response  {
+func GetPictureStatus(c *gin.Context) response.Response {
 	studentUuidInterface, _ := c.Get("uuid")
 	studentUuid := studentUuidInterface.(string)
 	return service.GetPictureStatus(studentUuid)

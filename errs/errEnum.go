@@ -1,22 +1,22 @@
 package errs
 
-// 封装一些常见的错误，实现 error 接口（其实就是从 Go 源码复制的）
-type errorString struct {
-	s string
+type errEnum uint
+
+func (e errEnum) Error() string {
+	errMsg := map[errEnum]string{
+		DataEmptyError:    "Data is empty",
+		MysqlQueryError:   "数据库查询错误",
+		InvalidTokenError: "无效的 token",
+	}
+	if msg, ok := errMsg[e]; ok {
+		return msg
+	} else {
+		return "未知错误"
+	}
 }
 
-func (e *errorString) Error() string {
-	return e.s
-}
-
-func DataEmptyError() error {
-	return &errorString{"Data is empty"}
-}
-
-func MysqlQueryError() error {
-	return &errorString{"数据库查询错误"}
-}
-
-func InvalidTokenError() error {
-	return &errorString{"无效的 token"}
-}
+const (
+	DataEmptyError errEnum = iota
+	MysqlQueryError
+	InvalidTokenError
+)
