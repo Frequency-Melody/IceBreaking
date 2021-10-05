@@ -8,7 +8,7 @@ type AuthSuccessDto struct {
 	Name                  string `json:"name"`
 }
 
-func (d AuthSuccessDto) Data() interface{} {
+func (d *AuthSuccessDto) Data() interface{} {
 	return d
 }
 

@@ -11,18 +11,18 @@ type Response interface {
 // BaseResponse 一个实现了 Response 接口的基类，其他类可直接继承并重写部分接口
 type BaseResponse int
 
-func (b BaseResponse) Error() error {
+func (b *BaseResponse) Error() error {
 	return nil
 }
 
-func (b BaseResponse) Code() int {
+func (b *BaseResponse) Code() int {
 	return 20000
 }
 
-func (b BaseResponse) Data() interface{} {
+func (b *BaseResponse) Data() interface{} {
 	return nil
 }
 
-func (b BaseResponse) Redirect() string {
+func (b *BaseResponse) Redirect() string {
 	return ""
 }

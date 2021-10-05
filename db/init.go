@@ -20,7 +20,7 @@ func init() {
 	fmt.Println("数据库初始化")
 }
 
-// 创建数据库连接
+// DbConn 创建数据库连接
 func DbConn() {
 	c := config.Get()
 	m := c.Mysql

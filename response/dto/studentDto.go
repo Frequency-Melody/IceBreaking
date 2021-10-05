@@ -10,7 +10,7 @@ type StudentsDto struct {
 	Students              []*StudentUuidNameDto
 }
 
-func (s StudentsDto) Data() interface{} {
+func (s *StudentsDto) Data() interface{} {
 	return s.Students
 }
 
@@ -20,6 +20,6 @@ type StudentUuidNameDto struct {
 	Name                  string
 }
 
-func (d StudentUuidNameDto) Data() interface{} {
+func (d *StudentUuidNameDto) Data() interface{} {
 	return d
 }

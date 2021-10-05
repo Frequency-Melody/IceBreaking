@@ -24,9 +24,9 @@ func VerifyPictureBelongToStudent(pictureUuid, studentUuid string) response.Resp
 	db.Get().Where(studentWhere).First(student)
 	studentUuidNameDto := &dto.StudentUuidNameDto{Uuid: student.Uuid, Name: student.Name}
 	if student.Uuid == studentUuid {
-		return dto.PictureVerifyDto{Verify: true, StudentInfo: studentUuidNameDto}
+		return &dto.PictureVerifyDto{Verify: true, StudentInfo: studentUuidNameDto}
 	} else {
-		return dto.PictureVerifyDto{Verify: false, StudentInfo: studentUuidNameDto}
+		return &dto.PictureVerifyDto{Verify: false, StudentInfo: studentUuidNameDto}
 	}
 }
 

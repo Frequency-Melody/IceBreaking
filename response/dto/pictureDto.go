@@ -11,25 +11,25 @@ type PictureWithStudents struct {
 	Students []*StudentUuidNameDto
 }
 
-func (p PictureWithStudents) Error() error {
+func (p *PictureWithStudents) Error() error {
 	if p.Picture.Uuid == "" {
 		return errs.DataEmptyError()
 	}
 	return nil
 }
 
-func (p PictureWithStudents) Code() int {
+func (p *PictureWithStudents) Code() int {
 	if p.Picture.Uuid == "" {
 		return 400000
 	}
 	return 20000
 }
 
-func (p PictureWithStudents) Data() interface{} {
+func (p *PictureWithStudents) Data() interface{} {
 	return p
 }
 
-func (p PictureWithStudents) Redirect() string {
+func (p *PictureWithStudents) Redirect() string {
 	return ""
 }
 
@@ -40,7 +40,7 @@ type PictureVerifyDto struct {
 	StudentInfo           *StudentUuidNameDto
 }
 
-func (d PictureVerifyDto) Data() interface{} {
+func (d *PictureVerifyDto) Data() interface{} {
 	return map[string]interface{}{"verify": d.Verify, "studentInfo": d.StudentInfo}
 }
 
@@ -60,6 +60,6 @@ type PictureUuidUrlDto struct {
 	Url                   string
 }
 
-func (d PictureUuidUrlDto) Data() interface{} {
+func (d *PictureUuidUrlDto) Data() interface{} {
 	return d
 }

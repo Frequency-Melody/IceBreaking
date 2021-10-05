@@ -16,13 +16,13 @@ func GetStudents() response.Response {
 	for _, s := range students {
 		studentDtos = append(studentDtos, &dto.StudentUuidNameDto{Uuid: s.Uuid, Name: s.Name})
 	}
-	return dto.StudentsDto{Students: studentDtos}
+	return &dto.StudentsDto{Students: studentDtos}
 }
 
 func GetStudentByUuid(studentUuid string) response.Response {
 	//return util.ModelToDto(crud.GetStudentByUuid(studentUuid), &dto.StudentUuidNameDto{}).(response.Response)
 	student := crud.GetStudentByUuid(studentUuid)
-	return dto.StudentUuidNameDto{Uuid: student.Uuid, Name: student.Name}
+	return &dto.StudentUuidNameDto{Uuid: student.Uuid, Name: student.Name}
 }
 
 // GetRandStudent 获取一个随机学生，unused
@@ -31,7 +31,7 @@ func GetRandStudent() response.Response {
 	index := rand.Int() % len(students)
 	//return util.ModelToDto(students[index], &dto.StudentUuidNameDto{}).(response.Response)
 	student := students[index]
-	return dto.StudentUuidNameDto{Uuid: student.Uuid, Name: student.Name}
+	return &dto.StudentUuidNameDto{Uuid: student.Uuid, Name: student.Name}
 }
 
 // GetRandStudentWithPicture 随机 num 个学生，并且抽出一个人返回照片
@@ -66,7 +66,7 @@ func GetRandStudentsWithPicture(num int) response.Response {
 	selectedStudentUuid := studentsCanBeShown[selectedIndex].Uuid
 	picture := crud.GetPictureByStudentUuid(selectedStudentUuid)
 	pictureUuidUrlDto := dto.PictureUuidUrlDto{Uuid: picture.Uuid, Url: picture.Url}
-	return dto.PictureWithStudents{Picture: pictureUuidUrlDto, Students: studentsRand}
+	return &dto.PictureWithStudents{Picture: pictureUuidUrlDto, Students: studentsRand}
 }
 
 func AddStudent(student *model.Student) response.Response {
@@ -74,15 +74,15 @@ func AddStudent(student *model.Student) response.Response {
 	if err != nil {
 		return response.StudentAlreadyExistError
 	}
-	return dto.UuidDTO{Uuid: student.Uuid}
+	return &dto.UuidDTO{Uuid: student.Uuid}
 }
 
 func CountStudents() response.Response {
 	return &dto.CountDto{Count: strconv.FormatInt(crud.CountStudents(), 10)}
 }
 
-func GetPictureStatus(studentUuid string) response.Response  {
-	return  &dto.HidePicDto{HidePic: crud.GetStudentByUuid(studentUuid).HidePic}
+func GetPictureStatus(studentUuid string) response.Response {
+	return &dto.HidePicDto{HidePic: crud.GetStudentByUuid(studentUuid).HidePic}
 }
 
 func UpdatePictureStatus(studentUuid string, hidePic bool) response.Response {
